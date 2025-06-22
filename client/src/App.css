@@ -1,38 +1,99 @@
-.App {
+/* Global Styles */
+body {
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0;
+  padding: 0;
+  background-color: #FADADD; /* Soft, gentle pink */
+  color: #4A148C; /* Deep plum text */
+}
+
+/* Navigation Bar */
+.navbar {
+  background-color: #C8A2C8; /* Lilac */
+  padding: 10px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #000000; /* Pastel yellow */
   text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: 600;
+  font-size: 16px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navbar a:hover {
+  background-color: #FFD1DC; /* Pastel Pink */
+  color: #4A148C;
+  border-radius: 6px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Main Content Layout */
+.content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
+  padding: 30px;
+  gap: 30px;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Section Cards */
+.left-section,
+.right-section {
+  background-color: #C1E1C1; /* Pastel Green */
+  padding: 25px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h1, h2 {
+  color: #4A148C;
+  margin-bottom: 15px;
+}
+
+/* Image Styles */
+.picture {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid #C8A2C8;
+  margin-top: 15px;
+}
+
+/* Story Text */
+.story {
+  margin-top: 20px;
+  font-style: italic;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Links List (Scholarship, Mentorship, etc.) */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  margin: 12px 0;
+}
+
+ul li a {
+  color: #6A1B9A;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+ul li a:hover {
+  color: #BA68C8;
+  text-decoration: underline;
 }
