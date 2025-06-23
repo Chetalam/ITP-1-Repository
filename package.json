@@ -1,6 +1,32 @@
 {
+  "name": "itp-1-repository",
+  "version": "1.0.0",
+  "description": "Bridging the Gap: A Centralized Platform for Opportunity and Mentorship Among Kenyan Women",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm start --prefix client",
+    "server": "nodemon server/index.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
   "dependencies": {
+    "nodemon": "^3.1.10",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1"
-  }
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chetalam/ITP-1-Repository.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chetalam/ITP-1-Repository/issues"
+  },
+  "homepage": "https://github.com/Chetalam/ITP-1-Repository#readme"
 }
