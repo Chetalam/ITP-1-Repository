@@ -1,22 +1,14 @@
 import React from 'react';
-// In App.js
-import '../../App.css';
+import '../../App.css'; // Importing global styles
 
+// Functional component for displaying leadership content and resources
 const LeadershipModule = () => {
   return (
     <>
-      {/* Navigation Bar */}
-      <div className="navbar">
-        <a href="/">Home</a>
-        <a href="/about">About Us</a>
-        <a href="/mentorship">Mentorship</a>
-        <a href="/scholarship">Scholarship</a>
-        <a href="/leadership">Leadership</a>
-        <a href="/contact">Contact Us</a>
-      </div>
-
-      {/* Main Content */}
+      {/* Main container for the page content */}
       <div className="content">
+        
+        {/* Left section: Definition of leadership and an inspirational story */}
         <div className="left-section">
           <h1>What is Leadership?</h1>
           <p>
@@ -25,8 +17,11 @@ const LeadershipModule = () => {
             Strong leadership is super important for any organization because it drives growth, builds a positive vibe, and helps everyone reach their best.
           </p>
 
+          {/* Section for real or fictional inspirational leadership story */}
           <h2>Inspirational Story</h2>
           <img
+            // Placeholder image — replace with a real image path like /images/leadership.jpg
+            src="/images/leadership.jpg"
             alt="Inspirational Image"
             className="picture"
           />
@@ -36,6 +31,7 @@ const LeadershipModule = () => {
           </p>
         </div>
 
+        {/* Right section: Links to leadership training opportunities */}
         <div className="right-section">
           <h1>Leadership Training Opportunities</h1>
           <ul className="training-list">
@@ -50,4 +46,5 @@ const LeadershipModule = () => {
   );
 };
 
+// Exporting the component so it can be used in other parts of the app (e.g., in routing)
 export default LeadershipModule;

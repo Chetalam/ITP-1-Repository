@@ -1,22 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import '../../App.css';
+// import { Link } from 'react-router-dom'; // Unused import, can be removed if not using <Link>
+import '../../App.css'; // Import shared CSS styles
 
+// Functional component for the Mentorship section
 const MentorModule = () => {
   return (
     <>
-      {/* Navigation Bar */}
-      <div className="navbar">
-        <Link to="/">Home</Link>
-        <Link to="/about">About Us</Link>
-        <Link to="/mentorship">Mentorship</Link>
-        <Link to="/scholarship">Scholarship</Link>
-        <Link to="/leadership">Leadership</Link>
-        <Link to="/contact">Contact Us</Link>
-      </div>
-
-      {/* Main Content */}
+      {/* Main container for the mentorship content */}
       <div className="content">
+        
+        {/* Left section: Introduction and success story */}
         <div className="left-section">
           <h1>Why Mentorship Matters</h1>
           <p>
@@ -25,9 +18,10 @@ const MentorModule = () => {
             Whether you are starting your journey or aiming higher, having a mentor can make a meaningful difference.
           </p>
 
+          {/* Success Story Section */}
           <h2>Real Mentorship Experience</h2>
           <img
-            src="/images/mentorship.jpg" // optional: add real image path
+            src="/images/mentorship.jpg" // Replace with actual image path if different
             alt="Mentorship Session"
             className="picture"
           />
@@ -38,6 +32,7 @@ const MentorModule = () => {
           </p>
         </div>
 
+        {/* Right section: List of external mentorship opportunities */}
         <div className="right-section">
           <h1>Mentorship Opportunities</h1>
           <ul className="mentorship-list">
@@ -47,9 +42,11 @@ const MentorModule = () => {
             <li><a href="https://example.com/mentorship4">Peer Mentorship & Support Network</a></li>
           </ul>
         </div>
+
       </div>
     </>
   );
 };
 
+// Export the component for use in routing or other modules
 export default MentorModule;
