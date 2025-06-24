@@ -29,7 +29,7 @@ function App() {
   return (
     <Router>
       <div style={{ padding: '20px' }}>
-        <h1>Women Empowerment Platform</h1>
+        <h1>EmpowerHer</h1>
 
         {/* Display both API messages */}
         {message && (
