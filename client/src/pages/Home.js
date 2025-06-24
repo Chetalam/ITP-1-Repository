@@ -1,41 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function Home() {
+  // State to store user inputs
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent form reload
+
+    try {
+      const res = await fetch("http://localhost/ITP-1-Repository/server/register.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, phone }),
+      });
+
+      const result = await res.json();
+      alert(result.message || result.error);
+    } catch (err) {
+      alert("Failed to connect to server");
+      console.error(err);
+    }
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: "20px" }}>
       <h1>Welcome to Our Empowerment Platform</h1>
       <p>
-        We are dedicated to supporting and uplifting young women across Kenya and beyond.
-        Our platform brings together opportunities for personal and professional growth through mentorship,
-        leadership training, and scholarships.
-      </p>
-      <p>
-        We believe in the power of connection and community. By bringing together mentors, resources, and
-        learning opportunities, we aim to ensure that every girl has a chance to learn, grow, and succeed.
+        We are dedicated to supporting and uplifting young women across Kenya and beyond. Our platform brings together
+        opportunities for personal and professional growth through mentorship, leadership training, and scholarships.
       </p>
 
-      {/* Login / Registration Form */}
-      <h2>Join Us</h2>
-      <form style={{ maxWidth: '400px' }}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Full Name:</label><br />
-          <input type="text" name="fullname" placeholder="Enter full name" required style={{ width: '100%', padding: '8px' }} />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Email:</label><br />
-          <input type="email" name="email" placeholder="Enter email" required style={{ width: '100%', padding: '8px' }} />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Phone Number:</label><br />
-          <input type="tel" name="phone" placeholder="Enter phone number" required style={{ width: '100%', padding: '8px' }} />
-        </div>
-        <button type="submit" style={{ padding: '10px 15px', backgroundColor: '#ff69b4', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Submit
-        </button>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        /><br /><br />
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        /><br /><br />
+
+        <input
+          type="tel"
+          placeholder="Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        /><br /><br />
+
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
 }
 
 export default Home;
-
