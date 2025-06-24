@@ -1,14 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../App.css'; // Importing global styles
 
-// Functional component for displaying leadership content and resources
 const LeadershipModule = () => {
+  // Optional: Manage sign-in input states
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    // You can connect this to your backend login API
+    console.log('User signed in with:', { email, password });
+    alert('Sign in submitted!');
+  };
+
   return (
     <>
-      {/* Main container for the page content */}
+      {/* Sign In Section */}
+      <div className="signin-section">
+        <h2>User Sign In</h2>
+        <form onSubmit={handleSignIn} className="signin-form">
+          <label>
+            Email:
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            Password:
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
+
+      {/* Main content section */}
       <div className="content">
-        
-        {/* Left section: Definition of leadership and an inspirational story */}
         <div className="left-section">
           <h1>What is Leadership?</h1>
           <p>
@@ -17,12 +53,10 @@ const LeadershipModule = () => {
             Strong leadership is super important for any organization because it drives growth, builds a positive vibe, and helps everyone reach their best.
           </p>
 
-          {/* Section for real or fictional inspirational leadership story */}
           <h2>Inspirational Story</h2>
           <img
-            // Placeholder image — replace with a real image path like /images/leadership.jpg
             src="/images/leadership.jpg"
-            alt="Inspirational Image"
+            alt="Inspirational"
             className="picture"
           />
           <p className="story">
@@ -31,7 +65,6 @@ const LeadershipModule = () => {
           </p>
         </div>
 
-        {/* Right section: Links to leadership training opportunities */}
         <div className="right-section">
           <h1>Leadership Training Opportunities</h1>
           <ul className="training-list">
@@ -46,5 +79,4 @@ const LeadershipModule = () => {
   );
 };
 
-// Exporting the component so it can be used in other parts of the app (e.g., in routing)
 export default LeadershipModule;
