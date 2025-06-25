@@ -20,7 +20,7 @@ $phone = $data['phone'];
 
 // Database connection
 $host = "localhost";
-$db = "women-empowerment_platform";  // Use your actual database name
+$db = "women_empowerment_platform";  // Use your actual database name
 $user = "root";  // Default XAMPP MySQL user
 $pass = "";      // Default XAMPP MySQL password is blank
 
