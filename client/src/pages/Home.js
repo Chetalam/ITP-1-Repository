@@ -11,7 +11,7 @@ function Home() {
     e.preventDefault(); // Prevent form reload
 
     try {
-      const res = await fetch("http://localhost/ITP-1-Repository/server/register.php", {
+      const res = await fetch("http://localhost:3001/ITP-1-Repository/server/register.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
