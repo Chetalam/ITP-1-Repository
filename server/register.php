@@ -14,7 +14,7 @@ $name = $data['name'];
 $email = $data['email'];
 $phone = $data['phone'];
 
-$conn = new mysqli("localhost", "root", "", "women_empowerment_platform");
+$conn = new mysqli("localhost", "root", "", "empowerher_db");
 
 if ($conn->connect_error) {
     echo json_encode(['error' => 'Database connection failed']);
