@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import '../../App.css'; // Importing global styles
+import '../../App.css'; // Global CSS styles
 
 const LeadershipModule = () => {
-  // Optional: Manage sign-in input states
+  // State to manage sign-in form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    // You can connect this to your backend login API
     console.log('User signed in with:', { email, password });
     alert('Sign in submitted!');
   };
 
   return (
     <>
-      {/* Sign In Section */}
+      {/* Sign In Form */}
       <div className="signin-section">
         <h2>User Sign In</h2>
         <form onSubmit={handleSignIn} className="signin-form">
@@ -43,8 +42,9 @@ const LeadershipModule = () => {
         </form>
       </div>
 
-      {/* Main content section */}
+      {/* Main Leadership Content */}
       <div className="content">
+        {/* Left Section */}
         <div className="left-section">
           <h1>What is Leadership?</h1>
           <p>
@@ -55,21 +55,18 @@ const LeadershipModule = () => {
 
           <h2>Inspirational Story</h2>
           <img
-<<<<<<< HEAD
-            src="/images/leadership.jpg"
-            alt="Inspirational"
-=======
-            // Placeholder image — replace with a real image path like /images/leadership.jpg
             src="/images/Maasaiwomanandstudents.jpg"
-            alt="Kenyan rebel evades child marriage and Maasai curses to win power After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride, Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader"
->>>>>>> f345f43043ba8b5d9c5b091af5893834a50cd687
+            alt="Kenyan rebel evades child marriage and Maasai curses to win power"
             className="picture"
           />
           <p className="story">
-            Kenyan rebel evades child marriage and Maasai curses to win power. After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride, Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader.          
-            </p>
+            Kenyan rebel evades child marriage and Maasai curses to win power.
+            After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride,
+            Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader.
+          </p>
         </div>
 
+        {/* Right Section */}
         <div className="right-section">
           <h1>Leadership Training Opportunities</h1>
           <ul className="training-list">
