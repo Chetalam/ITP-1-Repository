@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import WomenModule from './modules/Women/WomenModule';
 import MentorModule from './modules/Mentor/MentorModule';
 import ScholarshipModule from './modules/Scholarship/ScholarshipModule';
 import LeadershipModule from './modules/Leadership/LeadershipModule';
@@ -63,7 +62,6 @@ function App() {
           <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', padding: 0 }}>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/women">Women's Module</Link></li>
             <li><Link to="/mentor">Mentor's Module</Link></li>
             <li><Link to="/scholarship">Scholarship Module</Link></li>
             <li><Link to="/leadership">Leadership Module</Link></li>
@@ -76,7 +74,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
-          <Route path="/women" element={<WomenModule />} />
           <Route path="/mentor" element={<MentorModule />} />
           <Route path="/scholarship" element={<ScholarshipModule />} />
           <Route path="/leadership" element={<LeadershipModule />} />
