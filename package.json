@@ -5,11 +5,12 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "npm start --prefix client",
-    "server": "nodemon server/index.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
-  },
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "concurrently \"npm run server\" \"npm run client\"",
+  "server": "cd server && nodemon index.js",
+  "client": "cd client && npm start",
+  "dev": "concurrently \"npm run server\" \"npm run client\""
+},
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
