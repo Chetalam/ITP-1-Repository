@@ -21,14 +21,12 @@ const MentorModule = () => {
           {/* Success Story Section */}
           <h2>Real Mentorship Experience</h2>
           <img
-            src="/images/mentorship.jpg" // Replace with actual image path if different
+            src="/images/Solidarityfortheadvancementofwomensagenda.jpg" // Replace with actual image path if different
             alt="Mentorship Session"
             className="picture"
           />
           <p className="story">
-            After joining a mentorship program, Aisha connected with a professional in her field.
-            With regular support and practical advice, she gained direction and landed an internship.
-            Mentorship gave her the clarity and motivation she needed to move forward.
+            Four girls were admitted into a two-month training at Solidarity for the Advancement of Womens' Agenda (SAWA) in 2012. During this time, they covered various topical issues such as relationships, health and hygiene, careers, businesses and spirituality. After this, they graduated with many skills such as communication, business and interpersonal skills.
           </p>
         </div>
 

@@ -55,14 +55,19 @@ const LeadershipModule = () => {
 
           <h2>Inspirational Story</h2>
           <img
+<<<<<<< HEAD
             src="/images/leadership.jpg"
             alt="Inspirational"
+=======
+            // Placeholder image — replace with a real image path like /images/leadership.jpg
+            src="/images/Maasaiwomanandstudents.jpg"
+            alt="Kenyan rebel evades child marriage and Maasai curses to win power After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride, Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader"
+>>>>>>> f345f43043ba8b5d9c5b091af5893834a50cd687
             className="picture"
           />
           <p className="story">
-            Once, a young leader faced a daunting challenge. With determination and a clear vision, they rallied their team, fostering trust and collaboration.
-            Together, they overcame obstacles and achieved remarkable success, proving that true leadership lies in empowering others.
-          </p>
+            Kenyan rebel evades child marriage and Maasai curses to win power. After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride, Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader.          
+            </p>
         </div>
 
         <div className="right-section">
