@@ -1,41 +1,27 @@
 import React, { useState } from 'react';
+import '../../App.css'; // adjust path as needed
 
 function Home() {
-  // State to store user inputs
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form reload
+    e.preventDefault();
 
-    try {
-      const res = await fetch("http://localhost:3001/ITP-1-Repository/server/register.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, phone }),
-      });
+    const response = await fetch("http://localhost/ITP-1-Repository/server/register.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone }),
+    });
 
-      const result = await res.json();
-      alert(result.message || result.error);
-    } catch (err) {
-      alert("Failed to connect to server");
-      console.error(err);
-    }
+    const result = await response.json();
+    alert(result.message || result.error);
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="form-container">
       <h1>Welcome to Our Empowerment Platform</h1>
-      <p>
-        We are dedicated to supporting and uplifting young women across Kenya and beyond. Our platform brings together
-        opportunities for personal and professional growth through mentorship, leadership training, and scholarships.
-      </p>
-
-      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -43,24 +29,24 @@ function Home() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-        /><br /><br />
-
+        />
+        <br />
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        /><br /><br />
-
+        />
+        <br />
         <input
           type="tel"
           placeholder="Phone Number"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required
-        /><br /><br />
-
+        />
+        <br />
         <button type="submit">Submit</button>
       </form>
     </div>
