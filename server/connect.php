@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "women_empowerment_platform";
+$db = "empowerher_db";
 
 $conn = new mysqli($host, $user, $password, $db);
 
