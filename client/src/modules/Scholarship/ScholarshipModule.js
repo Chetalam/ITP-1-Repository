@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '../App.css'; // ✅ Adjusted path to App.css correctly
-
+import '../../App.css';
 
 const ScholarshipModule = () => {
   const [email, setEmail] = useState('');
