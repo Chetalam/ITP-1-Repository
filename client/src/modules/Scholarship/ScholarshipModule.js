@@ -68,10 +68,14 @@ const ScholarshipModule = () => {
         </div>
         <div className="right-section">
           <h1>Available Scholarships</h1>
-          <ul className="scholarship-list">
-            <li><a href="#">Scholarship 1</a></li>
-            <li><a href="#">Scholarship 2</a></li>
-          </ul>
+          <ul className="scholarship-list"> 
+
+         <li><a href="https://example.com/scholarship1" target="_blank" rel="noopener noreferrer">Undergraduate Women in Tech Scholarship</a></li> 
+         <li><a href="https://example.com/scholarship2" target="_blank" rel="noopener noreferrer">STEM Excellence Grant for Girls</a></li> 
+        <li><a href="https://example.com/scholarship3" target="_blank" rel="noopener noreferrer">Community Leaders Academic Fund</a></li> 
+         <li><a href="https://example.com/scholarship4" target="_blank" rel="noopener noreferrer">International Education Support Scholarship</a></li> 
+
+</ul>
         </div>
       </div>
     </>
