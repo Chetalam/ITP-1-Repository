@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import '../App.css'; // ✅ Adjusted path to App.css correctly
+import '../App.css'; // Make sure this path is correct
 
 function Home() {
-  // State for form input
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [status, setStatus] = useState(null);
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus('loading');
 
     try {
       const res = await fetch("http://localhost/ITP-1-Repository/server/register.php", {
@@ -21,8 +21,16 @@ function Home() {
       });
 
       const result = await res.json();
+
+      if (res.ok) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+
       alert(result.message || result.error);
     } catch (error) {
+      setStatus('error');
       alert("Failed to connect to the server.");
       console.error("Error:", error);
     }
@@ -42,44 +50,42 @@ function Home() {
         learning opportunities, we aim to ensure that every girl has a chance to learn, grow, and succeed.
       </p>
 
-      {/* Login Form */}
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="login-form">
-        <label>
-          Full Name:
+      {/* Floating Registration Form */}
+      <div className="floating-signin">
+        <h3>User Registration</h3>
+        <form onSubmit={handleSubmit} className="signin-form">
           <input
             type="text"
+            placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
-        </label>
-        <br />
-
-        <label>
-          Email:
           <input
             type="email"
+            placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
-        <br />
-
-        <label>
-          Phone Number:
           <input
             type="tel"
+            placeholder="Phone Number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
           />
-        </label>
-        <br />
-
-        <button type="submit">Submit</button>
-      </form>
+          <button type="submit" disabled={status === 'loading'}>
+            {status === 'loading' ? 'Submitting...' : 'Submit'}
+          </button>
+          {status === 'success' && (
+            <p className="status success">Registration successful!</p>
+          )}
+          {status === 'error' && (
+            <p className="status error">Registration failed. Please try again.</p>
+          )}
+        </form>
+      </div>
     </div>
   );
 }

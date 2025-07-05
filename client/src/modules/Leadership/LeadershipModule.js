@@ -2,47 +2,37 @@ import React, { useState } from 'react';
 import '../../App.css'; // Global CSS styles
 
 const LeadershipModule = () => {
-  // State to manage sign-in form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [status, setStatus] = useState(null);
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    console.log('User signed in with:', { email, password });
-    alert('Sign in submitted!');
+    setStatus('loading');
+
+    try {
+      const res = await fetch('http://localhost/ITP-1-Repository/server/signin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+
+      alert(result.message || result.error);
+    } catch (err) {
+      setStatus('error');
+      alert('Sign in failed. Please try again.');
+    }
   };
 
   return (
     <>
-      {/* Sign In Form */}
-      <div className="signin-section">
-        <h2>User Sign In</h2>
-        <form onSubmit={handleSignIn} className="signin-form">
-          <label>
-            Email:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
-          <br />
-          <button type="submit">Sign In</button>
-        </form>
-      </div>
-
-      {/* Main Leadership Content */}
       <div className="content">
         {/* Left Section */}
         <div className="left-section">
@@ -64,6 +54,32 @@ const LeadershipModule = () => {
             After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride,
             Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader.
           </p>
+
+          {/* Floating Sign In Panel */}
+          <div className="floating-signin">
+            <h3>User Sign In</h3>
+            <form onSubmit={handleSignIn} className="signin-form">
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button type="submit" disabled={status === 'loading'}>
+                {status === 'loading' ? 'Signing In...' : 'Sign In'}
+              </button>
+              {status === 'success' && <p className="status success">Signed in successfully!</p>}
+              {status === 'error' && <p className="status error">Sign in failed. Please try again.</p>}
+            </form>
+          </div>
         </div>
 
         {/* Right Section */}
