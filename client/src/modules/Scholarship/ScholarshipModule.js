@@ -43,12 +43,16 @@ const ScholarshipModule = () => {
             Take a step toward your future by exploring and applying for available opportunities.
           </p>
           <h2>Success Story</h2>
-          <img src="/images/scholarship.jpg" alt="Scholarship" className="picture" />
-          <p className="story">
-            Fatima, a bright student from a remote area, secured a full scholarship to study computer science.
-            Today, she mentors other girls in her community and works at a top tech company.
-            Her journey shows that with support, dreams are truly achievable.
-          </p>
+          <img
+  src="/images/Ambassadorsgirlsscholarshipprogramme.jpg"
+  alt="Scholarships for young girls"
+  className="picture"
+/>
+<p className="story">
+  This project, funded by USAID through AED, has supported over 6,000 girls.
+  The programme has emphasised interventions that empower girls through scholarships and support.
+  It has accelerated participation of disadvantaged girls in primary and secondary education.
+</p>
 
           {/* Floating Sign In Panel */}
           <div className="floating-signin">
