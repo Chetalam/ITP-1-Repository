@@ -28,10 +28,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  process.env.DB_PASSWORD || '', // Ensure it's not undefined
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT, // From Code 2
+    port: process.env.DB_PORT, // Keep port support
     dialect: 'mysql',
     logging: false
   }
