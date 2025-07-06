@@ -20,7 +20,7 @@ const ScholarshipModule = () => {
     });
 =======
     try {
-      const res = await fetch('http://localhost/ITP-1-Repository/server/signin.php', {
+      const res = await fetch('http://localhost/ITP-1-Repository/server/scholarship_login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
