@@ -8,7 +8,7 @@ if (!isset($data['email'], $data['password'])) {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "women_empowerment_platform");
+$conn = new mysqli("localhost", "root", "", "empowerher_db");
 if ($conn->connect_error) {
     echo json_encode(['error' => 'Database connection failed']);
     exit;
