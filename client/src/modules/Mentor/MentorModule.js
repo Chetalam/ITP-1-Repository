@@ -26,7 +26,9 @@ const MentorModule = () => {
             className="picture"
           />
           <p className="story">
-            Four girls were admitted into a two-month training at Solidarity for the Advancement of Womens' Agenda (SAWA) in 2012. During this time, they covered various topical issues such as relationships, health and hygiene, careers, businesses and spirituality. After this, they graduated with many skills such as communication, business and interpersonal skills.
+            Four girls were admitted into a two-month training at Solidarity for the Advancement of Womens' Agenda (SAWA) in 2012. 
+            During this time, they covered various topical issues such as relationships, health and hygiene, careers, businesses and spirituality. 
+            After this, they graduated with many skills such as communication, business and interpersonal skills.
           </p>
         </div>
 
