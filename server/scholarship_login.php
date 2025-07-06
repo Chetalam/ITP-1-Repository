@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     exit;
 }
 
-$sql = "SELECT * FROM scholarship_signin WHERE email=? AND password=?";
+$sql = "SELECT * FROM scholarship_signin WHERE email = ? AND password = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $email, $password);
 $stmt->execute();
