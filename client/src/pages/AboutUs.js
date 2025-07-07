@@ -66,7 +66,7 @@ function AboutUs() {
         </div>
         <div style={counterBox}>
           <h3>{partners}</h3>
-          <p>Partners</p>
+          <p>Leaders Engaged</p>
         </div>
       </div>
 
