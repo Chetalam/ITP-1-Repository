@@ -86,10 +86,11 @@ const LeadershipModule = () => {
         <div className="right-section">
           <h1>Leadership Training Opportunities</h1>
           <ul className="training-list">
-            <li><a href="https://example.com/training1">Leadership Essentials Course</a></li>
-            <li><a href="https://example.com/training2">Advanced Leadership Workshop</a></li>
-            <li><a href="https://example.com/training3">Executive Leadership Program</a></li>
-            <li><a href="https://example.com/training4">Team Building and Leadership Retreat</a></li>
+            <li><a href="https://woswa.org/">WOSWA (Women Students Mentorship Association)</a></li>
+            <li><a href="https://afwag.org/our-network/kenya">Alliance for Women & Girls – Samburu Girls Foundation</a></li>
+            <li><a href="https://afwag.org/our-network/kenya">Pendo Tendo Initiative (Kajiado) (Part of AFWAG network)</a></li>
+            <li><a href="https://www.seedsofhopeke.org/">Seeds of Hope Kenya (Kisii & Nyamira)</a></li>
+            <li><a href="https://www.thriveforchange.org/regional-outreach-kenya#:~:text=overview%20of%20thrive%20outreach&text=With%20relevant%20sponsorship%2C%20THRIVE%20plans,society%20(or%20regional%20government).">THRIVE for Change – Regional Outreach (Turkana, Lamu, Kilifi)</a></li>
           </ul>
         </div>
       </div>
