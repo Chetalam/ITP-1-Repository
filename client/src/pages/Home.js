@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import '../App.css'; // Make sure this path is correct
+import { useNavigate } from 'react-router-dom'; // Needed for redirection
+import '../App.css'; // Ensure the path is correct
 
 function Home() {
   const [name, setName] = useState('');
@@ -8,7 +8,7 @@ function Home() {
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState(null);
 
-  const navigate = useNavigate(); // for redirecting
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,11 +29,11 @@ function Home() {
         setStatus('success');
         alert(result.message || "Registration successful!");
 
-        // Store a simple login flag in localStorage
-        localStorage.setItem("userLoggedIn", "true");
+        // ✅ Set login state in localStorage
+        localStorage.setItem("isLoggedIn", "true");
 
-        // Redirect to another page (e.g., Mentorship)
-        navigate("/mentorship");
+        // ✅ Redirect to a protected page (you can change to /about, /mentor, etc.)
+        navigate("/mentor");
       } else {
         setStatus('error');
         alert(result.message || "Registration failed.");
@@ -59,7 +59,6 @@ function Home() {
         learning opportunities, we aim to ensure that every girl has a chance to learn, grow, and succeed.
       </p>
 
-      {/* Floating Registration Form */}
       <div className="floating-signin">
         <h3>User Registration</h3>
         <form onSubmit={handleSubmit} className="signin-form">
@@ -100,4 +99,5 @@ function Home() {
 }
 
 export default Home;
+
 
