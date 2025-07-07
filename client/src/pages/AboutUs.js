@@ -1,26 +1,132 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function AboutUs() {
+  // Impact counters
+  const [mentored, setMentored] = useState(0);
+  const [scholarships, setScholarships] = useState(0);
+  const [partners, setPartners] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMentored((prev) => (prev < 5000 ? prev + 50 : 5000));
+      setScholarships((prev) => (prev < 1200 ? prev + 10 : 1200));
+      setPartners((prev) => (prev < 50 ? prev + 1 : 50));
+    }, 30);
+    return () => clearInterval(interval);
+  }, []);
+
+  // FAQ accordion state
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(index === openIndex ? null : index);
+  };
+
+  const faqs = [
+    {
+      question: "Who can join the platform?",
+      answer: "Any young woman in Kenya, especially those from marginalized communities, is welcome to join."
+    },
+    {
+      question: "How do I apply for a scholarship?",
+      answer: "You can browse available scholarships on our platform and apply directly through the provided links."
+    },
+    {
+      question: "How can I become a mentor?",
+      answer: "Contact us through the 'Get in Touch' page, and our team will guide you through the onboarding process."
+    }
+  ];
+
   return (
     <div className="page-content">
       <h1>About Us</h1>
       <p>
-      We are a passionate team committed to empowering young women, especially those from marginalized communities,
-       by bridging the opportunity gap through technology. Our platform provides access to mentorship, scholarships,
-       leadership training, and job opportunities in a simple, accessible way.
+        We are a passionate team committed to empowering young women, especially those from marginalized communities,
+        by bridging the opportunity gap through technology.
       </p>
       <p>
         Every girl deserves a fair chance to learn, grow, and lead. Whether from a rural village or urban town, we believe
-        every young woman should have equal access to resources that help unlock her potential. Our digital platform is
-        designed to break barriers, offering life-changing opportunities right at her fingertips.
+        every young woman should have equal access to resources that help unlock her potential.
       </p>
       <p>
         We collaborate with mentors, educational institutions, and organizations across Kenya and beyond to build a strong
-        support system for girls and young women. Together, we aim to uplift, inform, and inspire the next generation of
-        leaders who will create positive change in their communities.
+        support system for girls and young women.
       </p>
+
+      {/* Impact Counters */}
+      <h2>Our Impact</h2>
+      <div style={countersContainer}>
+        <div style={counterBox}>
+          <h3>{mentored.toLocaleString()}</h3>
+          <p>Girls Mentored</p>
+        </div>
+        <div style={counterBox}>
+          <h3>{scholarships.toLocaleString()}</h3>
+          <p>Scholarships Awarded</p>
+        </div>
+        <div style={counterBox}>
+          <h3>{partners}</h3>
+          <p>Partners</p>
+        </div>
+      </div>
+
+      {/* FAQ Accordion */}
+      <h2>Frequently Asked Questions</h2>
+      <div style={faqContainer}>
+        {faqs.map((faq, index) => (
+          <div key={index} style={faqItem}>
+            <div
+              style={faqQuestion}
+              onClick={() => toggleFAQ(index)}
+            >
+              {faq.question}
+            </div>
+            {openIndex === index && (
+              <div style={faqAnswer}>
+                {faq.answer}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
+
+// Inline styles
+const countersContainer = {
+  display: "flex",
+  justifyContent: "space-around",
+  margin: "2rem 0",
+  flexWrap: "wrap"
+};
+
+const counterBox = {
+  textAlign: "center",
+  padding: "1rem",
+  minWidth: "120px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  background: "#f9f9f9",
+  margin: "0.5rem"
+};
+
+const faqContainer = {
+  marginTop: "1.5rem"
+};
+
+const faqItem = {
+  borderBottom: "1px solid #ccc",
+  padding: "0.5rem 0"
+};
+
+const faqQuestion = {
+  cursor: "pointer",
+  fontWeight: "bold"
+};
+
+const faqAnswer = {
+  marginTop: "0.5rem"
+};
 
 export default AboutUs;
