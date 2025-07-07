@@ -1,7 +1,9 @@
+// client/src/App.js
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import RegisterForm from './components/RegisterForm';
 import MentorModule from './modules/Mentorship/MentorModule';
 import ScholarshipModule from './modules/Scholarship/ScholarshipModule';
 import LeadershipModule from './modules/Leadership/LeadershipModule';
@@ -12,8 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   useEffect(() => {
-    // Example: Fetch API status or config on app load
-    axios.get('http://localhost:5000/api/status')
+    axios
+      .get('http://localhost:5000/api/status')
       .then(res => {
         console.log('✅ Backend status:', res.data);
       })
@@ -34,6 +36,7 @@ function App() {
             <li><Link to="/scholarship">Scholarship</Link></li>
             <li><Link to="/leadership">Leadership</Link></li>
             <li><Link to="/contact">Contact Us</Link></li>
+            <li><Link to="/register">Register</Link></li>
           </ul>
         </nav>
 
@@ -44,6 +47,7 @@ function App() {
           <Route path="/mentor" element={<ProtectedRoute><MentorModule /></ProtectedRoute>} />
           <Route path="/scholarship" element={<ProtectedRoute><ScholarshipModule /></ProtectedRoute>} />
           <Route path="/leadership" element={<ProtectedRoute><LeadershipModule /></ProtectedRoute>} />
+          <Route path="/register" element={<RegisterForm />} />
         </Routes>
       </div>
     </Router>
