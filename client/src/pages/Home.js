@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../App.css'; // Make sure this path is correct
 
 function Home() {
@@ -6,6 +7,8 @@ function Home() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState(null);
+
+  const navigate = useNavigate(); // for redirecting
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,11 +27,17 @@ function Home() {
 
       if (res.ok) {
         setStatus('success');
+        alert(result.message || "Registration successful!");
+
+        // Store a simple login flag in localStorage
+        localStorage.setItem("userLoggedIn", "true");
+
+        // Redirect to another page (e.g., Mentorship)
+        navigate("/mentorship");
       } else {
         setStatus('error');
+        alert(result.message || "Registration failed.");
       }
-
-      alert(result.message || result.error);
     } catch (error) {
       setStatus('error');
       alert("Failed to connect to the server.");
@@ -91,3 +100,4 @@ function Home() {
 }
 
 export default Home;
+
