@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import axios from 'axios';
 
-import MentorModule from './modules/Mentor/MentorModule';
+// ✅ UPDATED import path
+import MentorModule from './modules/Mentorship/MentorModule';
+
 import ScholarshipModule from './modules/Scholarship/ScholarshipModule';
 import LeadershipModule from './modules/Leadership/LeadershipModule';
 import Home from './pages/Home';

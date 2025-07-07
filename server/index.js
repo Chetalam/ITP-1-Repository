@@ -1,15 +1,9 @@
 // ======= Dependencies =======
 require('dotenv').config();
 
-console.log('✅ Loaded environment variables:');
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('DB_PORT:', process.env.DB_PORT);
-
 const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
+const mysql = require('mysql2/promise');
 const cors = require('cors');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
@@ -24,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ======= Database Connection =======
+// ======= Sequelize (General App DB: Users & Opportunities) =======
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -35,7 +29,15 @@ const sequelize = new Sequelize(
   }
 );
 
-// ======= Models =======
+// ======= MySQL2 (Mentor/Mentee Logic) =======
+const mysqlDb = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+// ======= Sequelize Models =======
 const User = sequelize.define('User', {
   name: DataTypes.STRING,
   email: { type: DataTypes.STRING, unique: true },
@@ -53,7 +55,7 @@ const Opportunity = sequelize.define('Opportunity', {
 // ======= File Upload =======
 const upload = multer({ dest: 'uploads/' });
 
-// ======= Auth Middleware =======
+// ======= JWT Auth Middleware =======
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token provided' });
@@ -76,13 +78,11 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from the backend!' });
 });
 
-// ⭐ This is the simple route from Code 1
 app.get('/api/message', (req, res) => {
   res.json({ message: 'Hello from the backend!' });
 });
 
-// ======= Auth Routes =======
-// Registration
+// ======= Auth Routes (Users) =======
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -95,7 +95,6 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-// Login
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email } });
@@ -104,41 +103,93 @@ app.post('/api/auth/login', async (req, res) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
-  const token = jwt.sign(
-    { userId: user.id, role: user.role },
-    process.env.JWT_SECRET
-  );
+  const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET);
   res.json({ token });
 });
 
-// ======= Opportunities Routes =======
-// Get All Opportunities
+// ======= Opportunities =======
 app.get('/api/opportunities', async (req, res) => {
   const opportunities = await Opportunity.findAll();
   res.json(opportunities);
 });
 
-// Create Opportunity (Protected)
-app.post(
-  '/api/opportunities',
-  authMiddleware,
-  upload.single('file'),
-  async (req, res) => {
-    const { title, description, category } = req.body;
-    const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
-    const opportunity = await Opportunity.create({
-      title,
-      description,
-      category,
-      fileUrl,
-    });
-    res.status(201).json(opportunity);
-  }
-);
+app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req, res) => {
+  const { title, description, category } = req.body;
+  const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
+  const opportunity = await Opportunity.create({
+    title,
+    description,
+    category,
+    fileUrl,
+  });
+  res.status(201).json(opportunity);
+});
+
+// ======= Mentor Routes (MySQL2) =======
+app.post('/api/mentor/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+  await mysqlDb.query(
+    'INSERT INTO mentor_signing (name, email, password) VALUES (?, ?, ?)',
+    [name, email, hashed]
+  );
+  res.json({ message: 'Mentor registered successfully' });
+});
+
+app.post('/api/mentor/login', async (req, res) => {
+  const { email, password } = req.body;
+  const [rows] = await mysqlDb.query('SELECT * FROM mentor_signing WHERE email = ?', [email]);
+  if (rows.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
+
+  const mentor = rows[0];
+  const isMatch = await bcrypt.compare(password, mentor.password);
+  if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
+  res.json({ message: 'Login successful', mentorId: mentor.id, name: mentor.name });
+});
+
+app.get('/api/mentor/:id/dashboard', async (req, res) => {
+  const mentorId = req.params.id;
+  const [mentees] = await mysqlDb.query(
+    'SELECT * FROM user_mentee WHERE mentor_id = ?',
+    [mentorId]
+  );
+  res.json({ menteeCount: mentees.length, mentees });
+});
+
+// ======= Mentee Routes (MySQL2) =======
+app.post('/api/mentee/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+  await mysqlDb.query(
+    'INSERT INTO user_mentee (name, email, password) VALUES (?, ?, ?)',
+    [name, email, hashed]
+  );
+  res.json({ message: 'Mentee registered successfully' });
+});
+
+app.post('/api/mentee/login', async (req, res) => {
+  const { email, password } = req.body;
+  const [rows] = await mysqlDb.query('SELECT * FROM user_mentee WHERE email = ?', [email]);
+  if (rows.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
+
+  const mentee = rows[0];
+  const isMatch = await bcrypt.compare(password, mentee.password);
+  if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
+  res.json({ message: 'Login successful', menteeId: mentee.id, name: mentee.name });
+});
+
+app.post('/api/mentee/:id/apply', async (req, res) => {
+  const menteeId = req.params.id;
+  const { mentorId } = req.body;
+  await mysqlDb.query('UPDATE user_mentee SET mentor_id = ? WHERE id = ?', [mentorId, menteeId]);
+  res.json({ message: 'Applied to mentor successfully' });
+});
 
 // ======= Start Server =======
 sequelize.sync().then(() => {
-  console.log('✅ Database synchronized');
+  console.log('✅ Sequelize DB synced');
   app.listen(PORT, () => {
     console.log(`✅ Server is running on http://localhost:${PORT}`);
   });

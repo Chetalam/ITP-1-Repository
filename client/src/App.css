@@ -55,7 +55,7 @@ body {
 /* Section Cards */
 .left-section,
 .right-section {
-  background-color: #B0E0E6; /* Neutral Powder Blue */
+  background-color: #B0E0E6;
   padding: 25px;
   border-radius: 20px;
   width: 100%;
@@ -65,14 +65,13 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover effect */
 .left-section:hover,
 .right-section:hover {
   transform: translateY(-8px);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15);
 }
 
-/* Women Module Slideshow Block */
+/* Women Module Slideshow */
 .women-slideshow {
   background-color: #F3E5F5;
   padding: 25px;
@@ -112,26 +111,77 @@ body {
   color: #333;
 }
 
-.signin-form {
+/* Auth Panel */
+.auth-panel {
+  background: #f9f9ff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  margin: 2rem auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Auth Tabs */
+.auth-tabs,
+.role-tabs,
+.mode-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.auth-tabs button,
+.role-tabs button,
+.mode-tabs button {
+  background: #e0e0f0;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.auth-tabs button.active,
+.role-tabs button.active,
+.mode-tabs button.active {
+  background: #4a69bd;
+  color: #fff;
+}
+
+/* Forms */
+form {
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  animation: fadeSlide 0.5s ease;
 }
 
+form input,
 .signin-form input {
-  margin-bottom: 12px;
-  padding: 10px;
+  padding: 0.5rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
+form button,
 .signin-form button {
-  background-color: #007bff;
-  color: white;
+  background: #4a69bd;
+  color: #fff;
+  padding: 0.6rem;
   border: none;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+form button:hover,
+.signin-form button:hover {
+  background: #3b4d91;
 }
 
 .signin-form button:disabled {
@@ -139,6 +189,24 @@ body {
   cursor: not-allowed;
 }
 
+/* Form Container (from Code 1) */
+.form-container {
+  position: relative;
+  min-height: 200px;
+}
+
+.form-container form {
+  position: absolute;
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.form-container form.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Status Messages */
 .status {
   margin-top: 10px;
   font-size: 0.9rem;
@@ -236,16 +304,36 @@ button.cta:hover {
   transform: scale(1.05);
 }
 
-/* Keyframes */
+/* Opportunities List */
+.opportunities-list {
+  margin-top: 2rem;
+}
+
+.opportunities-list h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.opportunities-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.opportunities-list li {
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+/* Animations */
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
 
 @keyframes floaty {
-  0% { transform: translateY(0px); }
+  0% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  100% { transform: translateY(0); }
 }
 
 @keyframes fadeSlide {
@@ -274,5 +362,21 @@ button.cta:hover {
   .women-slideshow {
     margin: 10px;
     padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-panel {
+    padding: 1rem;
+  }
+
+  .role-tabs,
+  .mode-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  form button {
+    width: 100%;
   }
 }
