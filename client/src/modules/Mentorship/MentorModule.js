@@ -1,6 +1,5 @@
-// MentorModule.js
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '../../App.css';
 import MentorAuthentication from './MentorAuthentication';
 import MenteeAuthentication from './MenteeAuthentication';
@@ -11,6 +10,14 @@ const MentorModule = () => {
   const [activeRole, setActiveRole] = useState('mentor'); // "mentor" or "mentee"
   const [mentorData, setMentorData] = useState(null);
   const [menteeData, setMenteeData] = useState(null);
+  const [mentors, setMentors] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('/api/mentors')
+      .then((res) => setMentors(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <div className="content">
@@ -34,6 +41,18 @@ const MentorModule = () => {
           During this time, they covered various topical issues such as relationships, health and hygiene, careers, businesses, and spirituality.
           After this, they graduated with many skills such as communication, business, and interpersonal skills.
         </p>
+
+        {/* Available Mentors */}
+        <h2>Available Mentors</h2>
+        {mentors.length > 0 ? (
+          <ul>
+            {mentors.map((m) => (
+              <li key={m.id}>{m.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No mentors available at the moment.</p>
+        )}
       </div>
 
       {/* Right Section */}
@@ -96,12 +115,10 @@ const MentorModule = () => {
           ) : (
             <MentorAuthentication onLogin={setMentorData} />
           )
+        ) : menteeData ? (
+          <MenteeApply menteeId={menteeData.menteeId} />
         ) : (
-          menteeData ? (
-            <MenteeApply menteeId={menteeData.menteeId} />
-          ) : (
-            <MenteeAuthentication onLogin={setMenteeData} />
-          )
+          <MenteeAuthentication onLogin={setMenteeData} />
         )}
       </div>
     </div>

@@ -1,6 +1,12 @@
 // ======= Dependencies =======
 require('dotenv').config();
 
+console.log('✅ Loaded environment variables:');
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '(hidden)' : 'NOT SET');
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_HOST:', process.env.DB_HOST);
+
 const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
 const mysql = require('mysql2/promise');
@@ -185,6 +191,19 @@ app.post('/api/mentee/:id/apply', async (req, res) => {
   const { mentorId } = req.body;
   await mysqlDb.query('UPDATE user_mentee SET mentor_id = ? WHERE id = ?', [mentorId, menteeId]);
   res.json({ message: 'Applied to mentor successfully' });
+});
+
+// ======= Extra Route Alias (/api/register) =======
+app.post('/api/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    const hashed = await bcrypt.hash(password, 10);
+    const user = await User.create({ name, email, password: hashed });
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: 'Email already exists' });
+  }
 });
 
 // ======= Start Server =======

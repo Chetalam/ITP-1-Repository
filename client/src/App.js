@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-// ✅ UPDATED import path
 import MentorModule from './modules/Mentorship/MentorModule';
-
 import ScholarshipModule from './modules/Scholarship/ScholarshipModule';
 import LeadershipModule from './modules/Leadership/LeadershipModule';
 import Home from './pages/Home';
@@ -12,6 +11,17 @@ import ContactUs from './pages/ContactUs';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  useEffect(() => {
+    // Example: Fetch API status or config on app load
+    axios.get('http://localhost:5000/api/status')
+      .then(res => {
+        console.log('✅ Backend status:', res.data);
+      })
+      .catch(err => {
+        console.error('❌ Backend not responding:', err);
+      });
+  }, []);
+
   return (
     <Router>
       <div style={{ padding: '2rem' }}>
