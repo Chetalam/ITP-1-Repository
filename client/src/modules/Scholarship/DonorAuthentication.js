@@ -1,44 +1,49 @@
-// ScholarshipOfficeAuthentication.js
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const ScholarshipOfficeAuthentication = ({ onLogin }) => {
+const DonorAuthentication = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isLogin) {
-        const res = await axios.post("/api/scholarship-office/login", {
+        const res = await axios.post('/api/donor/login', {
           email: form.email,
           password: form.password,
         });
-        onLogin(res.data); // Expecting { officeId, name }
+        onLogin(res.data);
       } else {
-        await axios.post("/api/scholarship-office/register", form);
-        alert("Registered successfully! You can now log in.");
+        await axios.post('/api/donor/register', form);
+        alert('Registered successfully! You can now log in.');
         setIsLogin(true);
-        setForm({ name: "", email: "", password: "" });
+        setForm({ name: '', email: '', password: '' });
       }
     } catch (err) {
-      console.error("Scholarship Office authentication error:", err);
-      alert("Something went wrong. Please try again.");
+      console.error(err);
+      alert('Something went wrong. Please try again.');
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-tabs">
-        <button className={isLogin ? "active" : ""} onClick={() => setIsLogin(true)}>
+        <button
+          className={isLogin ? 'active' : ''}
+          onClick={() => setIsLogin(true)}
+        >
           Login
         </button>
-        <button className={!isLogin ? "active" : ""} onClick={() => setIsLogin(false)}>
+        <button
+          className={!isLogin ? 'active' : ''}
+          onClick={() => setIsLogin(false)}
+        >
           Register
         </button>
       </div>
       <form onSubmit={handleSubmit}>
-        <h2>Scholarship Office {isLogin ? "Login" : "Register"}</h2>
+        <h2>Donor {isLogin ? 'Login' : 'Register'}</h2>
         {!isLogin && (
           <input
             placeholder="Name"
@@ -61,10 +66,10 @@ const ScholarshipOfficeAuthentication = ({ onLogin }) => {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           required
         />
-        <button type="submit">{isLogin ? "Login" : "Register"}</button>
+        <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>
     </div>
   );
 };
 
-export default ScholarshipOfficeAuthentication;
+export default DonorAuthentication;

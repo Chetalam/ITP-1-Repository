@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./MentorModule.css"; // Make sure your styles are imported
-import MenteeAuthentication from "./MenteeAuthentication";
-import MenteeApply from "./MenteeApply";
+import TraineeAuthentication from "./TraineeAuthentication";
+import TraineeApply from "./TraineeApply";
 
-export default function MentorMenteeModule() {
-  const [role, setRole] = useState("mentor"); // "mentor" or "mentee"
+export default function MentorTraineeModule() {
+  const [role, setRole] = useState("mentor"); // "mentor" or "trainee"
   const [mode, setMode] = useState("login"); // "login" or "register"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [menteeData, setMenteeData] = useState(null);
+  const [traineeData, setTraineeData] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,11 +19,11 @@ export default function MentorMenteeModule() {
   return (
     <div className="content">
       <div className="left-section">
-        <h1>{role === "mentor" ? "Mentor Portal" : "Mentee Portal"}</h1>
+        <h1>{role === "mentor" ? "Mentor Portal" : "Trainee Portal"}</h1>
         <p>
           {role === "mentor"
             ? "Mentors can log in or register below."
-            : "Mentees can register, log in, and apply to a mentor here."}
+            : "Trainees can register, log in, and apply to a mentor here."}
         </p>
       </div>
 
@@ -37,19 +37,19 @@ export default function MentorMenteeModule() {
             Mentor
           </button>
           <button
-            className={role === "mentee" ? "active" : ""}
-            onClick={() => setRole("mentee")}
+            className={role === "trainee" ? "active" : ""}
+            onClick={() => setRole("trainee")}
           >
-            Mentee
+            Trainee
           </button>
         </div>
 
-        {/* If Mentee */}
-        {role === "mentee" ? (
-          !menteeData ? (
-            <MenteeAuthentication onLogin={setMenteeData} />
+        {/* If Trainee */}
+        {role === "trainee" ? (
+          !traineeData ? (
+            <TraineeAuthentication onLogin={setTraineeData} />
           ) : (
-            <MenteeApply menteeId={menteeData.menteeId} />
+            <TraineeApply traineeId={traineeData.traineeId} />
           )
         ) : (
           <>
@@ -99,7 +99,8 @@ export default function MentorMenteeModule() {
             <ul>
               <li>Femiscope Initiative (Githurai 44, Nairobi)</li>
               <li>
-                Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)</li>
+                Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)
+              </li>
               <li>Swahiba Networks – Mentorship & Empowerment Program (MEP)</li>
               <li>HOPE for Girls @ VISA</li>
               <li>Mentor Match Kenya</li>

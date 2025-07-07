@@ -5,12 +5,11 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import RegisterForm from './components/RegisterForm';
 import MentorModule from './modules/Mentorship/MentorModule';
-import ScholarshipModule from './modules/Scholarship/ScholarshipModule';
-import LeadershipModule from './modules/Leadership/LeadershipModule';
+import DonorModule from './modules/Scholarship/DonorModule';
+import TrainerModule from './modules/Leadership/TrainerModule';// Update this to LeadershipPortal if you migrated
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
-import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   useEffect(() => {
@@ -32,7 +31,7 @@ function App() {
           <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', padding: 0 }}>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/mentor">Mentor</Link></li>
+            <li><Link to="/mentorship">Mentorship</Link></li>
             <li><Link to="/scholarship">Scholarship</Link></li>
             <li><Link to="/leadership">Leadership</Link></li>
             <li><Link to="/contact">Contact Us</Link></li>
@@ -42,11 +41,11 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<ProtectedRoute><AboutUs /></ProtectedRoute>} />
-          <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
-          <Route path="/mentor" element={<ProtectedRoute><MentorModule /></ProtectedRoute>} />
-          <Route path="/scholarship" element={<ProtectedRoute><ScholarshipModule /></ProtectedRoute>} />
-          <Route path="/leadership" element={<ProtectedRoute><LeadershipModule /></ProtectedRoute>} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/mentorship" element={<MentorModule />} />
+          <Route path="/scholarship" element={<DonorModule />} />
+          <Route path="/leadership" element={<TrainerModule />} />
           <Route path="/register" element={<RegisterForm />} />
         </Routes>
       </div>
