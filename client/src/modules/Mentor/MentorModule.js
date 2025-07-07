@@ -36,10 +36,12 @@ const MentorModule = () => {
         <div className="right-section">
           <h1>Mentorship Opportunities</h1>
           <ul className="mentorship-list">
-            <li><a href="https://example.com/mentorship1">Women in Tech Mentorship Program</a></li>
-            <li><a href="https://example.com/mentorship2">Career Guidance for Young Women</a></li>
-            <li><a href="https://example.com/mentorship3">Entrepreneurship Mentorship Circle</a></li>
-            <li><a href="https://example.com/mentorship4">Peer Mentorship & Support Network</a></li>
+            <li><a href="https://femiscope.org/">Femiscope Initiative (Githurai 44, Nairobi)</a></li>
+            <li><a href="https://passiontosharefoundation.org/mentorship-program/">Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)</a></li>
+            <li><a href="https://swahiba.org/mentorship-empowerment-program/">Swahiba Networks – Mentorship & Empowerment Program (MEP)</a></li>
+            <li><a href="https://hopeforgirls.or.ke/mentorship/">HOPE for Girls @ VISA</a></li>
+            <li><a href="https://mentormatchkenya.com/">Mentor Match Kenya</a></li>
+            <li><a href="https://www.centerformentorship.co.ke/">Center for Mentorship & Counselling</a></li>
           </ul>
         </div>
 

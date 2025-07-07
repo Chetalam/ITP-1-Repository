@@ -15,22 +15,23 @@ function App() {
   const [testMessage, setTestMessage] = useState('');
 
   useEffect(() => {
-    // Fetch /api/message using axios
-    axios.get('/api/message')
-      .then(response => setMessage(response.data.message))
-      .catch(error => console.error('Error fetching /api/message:', error));
+    // Fetch /api/message using absolute URL to avoid CORS issues
+    fetch('http://localhost:5000/api/message')
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message))
+      .catch((err) => console.error('Error fetching /api/message:', err));
 
     // Fetch /api/hello using fetch
-    fetch('/api/hello')
-      .then(res => res.json())
-      .then(data => setHelloMessage(data.message))
-      .catch(error => console.error('Error fetching /api/hello:', error));
+    fetch('http://localhost:5000/api/hello')
+      .then((res) => res.json())
+      .then((data) => setHelloMessage(data.message))
+      .catch((error) => console.error('Error fetching /api/hello:', error));
 
     // Fetch /api/test using fetch
-    fetch('/api/test')
-      .then(res => res.json())
-      .then(data => setTestMessage(data.message))
-      .catch(error => console.error('Error fetching /api/test:', error));
+    fetch('http://localhost:5000/api/test')
+      .then((res) => res.json())
+      .then((data) => setTestMessage(data.message))
+      .catch((error) => console.error('Error fetching /api/test:', error));
   }, []);
 
   return (

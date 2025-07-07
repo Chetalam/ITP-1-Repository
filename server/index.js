@@ -28,12 +28,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
-  process.env.DB_PASSWORD || '', // Ensure it's not undefined
+  process.env.DB_PASSWORD || null,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT, // Keep port support
     dialect: 'mysql',
-    logging: false
   }
 );
 
@@ -42,14 +40,14 @@ const User = sequelize.define('User', {
   name: DataTypes.STRING,
   email: { type: DataTypes.STRING, unique: true },
   password: DataTypes.STRING,
-  role: { type: DataTypes.ENUM('user', 'admin'), defaultValue: 'user' }
+  role: { type: DataTypes.ENUM('user', 'admin'), defaultValue: 'user' },
 });
 
 const Opportunity = sequelize.define('Opportunity', {
   title: DataTypes.STRING,
   description: DataTypes.TEXT,
   category: DataTypes.STRING,
-  fileUrl: DataTypes.STRING
+  fileUrl: DataTypes.STRING,
 });
 
 // ======= File Upload =======
@@ -78,12 +76,12 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from the backend!' });
 });
 
+// ⭐ This is the simple route from Code 1
 app.get('/api/message', (req, res) => {
-  res.json({ message: 'Message from /api/message endpoint' });
+  res.json({ message: 'Hello from the backend!' });
 });
 
 // ======= Auth Routes =======
-
 // Registration
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
@@ -114,7 +112,6 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // ======= Opportunities Routes =======
-
 // Get All Opportunities
 app.get('/api/opportunities', async (req, res) => {
   const opportunities = await Opportunity.findAll();
@@ -122,12 +119,22 @@ app.get('/api/opportunities', async (req, res) => {
 });
 
 // Create Opportunity (Protected)
-app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req, res) => {
-  const { title, description, category } = req.body;
-  const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
-  const opportunity = await Opportunity.create({ title, description, category, fileUrl });
-  res.status(201).json(opportunity);
-});
+app.post(
+  '/api/opportunities',
+  authMiddleware,
+  upload.single('file'),
+  async (req, res) => {
+    const { title, description, category } = req.body;
+    const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
+    const opportunity = await Opportunity.create({
+      title,
+      description,
+      category,
+      fileUrl,
+    });
+    res.status(201).json(opportunity);
+  }
+);
 
 // ======= Start Server =======
 sequelize.sync().then(() => {

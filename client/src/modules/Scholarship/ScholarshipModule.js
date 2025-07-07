@@ -85,10 +85,13 @@ const ScholarshipModule = () => {
       <div className="right-section">
         <h1>Available Scholarships</h1>
         <ul className="scholarship-list">
-          <li><a href="https://example.com/scholarship1" target="_blank" rel="noopener noreferrer">Undergraduate Women in Tech Scholarship</a></li>
-          <li><a href="https://example.com/scholarship2" target="_blank" rel="noopener noreferrer">STEM Excellence Grant for Girls</a></li>
-          <li><a href="https://example.com/scholarship3" target="_blank" rel="noopener noreferrer">Community Leaders Academic Fund</a></li>
-          <li><a href="https://example.com/scholarship4" target="_blank" rel="noopener noreferrer">International Education Support Scholarship</a></li>
+          <li><a href="https://ngaaf.go.ke/programs/" target="_blank" rel="noopener noreferrer">National Government Affirmative Action Fund (NGAAF)</a></li>
+          <li><a href="https://www.kiswcd.co.ke/scholarships/" target="_blank" rel="noopener noreferrer">Kenya Institute of Social Work & Community Development (KISWCD)</a></li>
+          <li><a href="https://villagevolunteers.org/country/butterfly-project-scholarships/" target="_blank" rel="noopener noreferrer">Butterfly Project Scholarships</a></li>
+          <li><a href="https://www.kiberayouth.org/kibera-girls-scholarship-program" target="_blank" rel="noopener noreferrer">Kibera Girls Scholarship Program</a></li>
+          <li><a href="https://maasaigirlseducation.org/what-we-do/scholarship-program/" target="_blank" rel="noopener noreferrer">Maasai Girls Education Fund (MGEF)</a></li>
+          <li><a href="https://www.amazinggirls.org/amazing-scholarship-program?" target="_blank" rel="noopener noreferrer">Amazing Maasai Girls Project</a></li>
+          <li><a href="https://themaarifafoundation.org/education-bursaries/" target="_blank" rel="noopener noreferrer">Maarifa Foundation</a></li>
         </ul>
       </div>
     </div>
