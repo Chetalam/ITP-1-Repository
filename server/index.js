@@ -132,30 +132,57 @@ app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req
 });
 
 // ======= Mentor Routes (MySQL2) =======
+// Register Mentor
 app.post('/api/mentor/register', async (req, res) => {
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
-  await mysqlDb.query('INSERT INTO mentor_signing (name, email, password) VALUES (?, ?, ?)', [name, email, hashed]);
+  await mysqlDb.query(
+    'INSERT INTO mentor_signing (name, email, password) VALUES (?, ?, ?)',
+    [name, email, hashed]
+  );
   res.json({ message: 'Mentor registered successfully' });
 });
 
+// Login Mentor
 app.post('/api/mentor/login', async (req, res) => {
   const { email, password } = req.body;
-  const [rows] = await mysqlDb.query('SELECT * FROM mentor_signing WHERE email = ?', [email]);
-  if (rows.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
+  const [rows] = await mysqlDb.query(
+    'SELECT * FROM mentor_signing WHERE email = ?',
+    [email]
+  );
+  if (rows.length === 0)
+    return res.status(401).json({ error: 'Invalid credentials' });
 
   const mentor = rows[0];
   const isMatch = await bcrypt.compare(password, mentor.password);
-  if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+  if (!isMatch)
+    return res.status(401).json({ error: 'Invalid credentials' });
 
-  res.json({ message: 'Login successful', mentorId: mentor.id, name: mentor.name });
+  res.json({
+    message: 'Login successful',
+    mentorId: mentor.id,
+    name: mentor.name,
+  });
 });
 
+// List All Mentors
+app.get('/api/mentors', async (req, res) => {
+  const [mentors] = await mysqlDb.query(
+    'SELECT id, name, email FROM mentor_signing'
+  );
+  res.json(mentors);
+});
+
+// Mentor Dashboard
 app.get('/api/mentor/:id/dashboard', async (req, res) => {
   const mentorId = req.params.id;
-  const [mentees] = await mysqlDb.query('SELECT * FROM user_mentee WHERE mentor_id = ?', [mentorId]);
+  const [mentees] = await mysqlDb.query(
+    'SELECT * FROM user_mentee WHERE mentor_id = ?',
+    [mentorId]
+  );
   res.json({ menteeCount: mentees.length, mentees });
 });
+
 
 // ======= Mentee Routes (MySQL2) =======
 app.post('/api/mentee/register', async (req, res) => {
