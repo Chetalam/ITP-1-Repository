@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../App.css";
 
 import TrainerAuthentication from "./TrainerAuthentication";
@@ -7,10 +7,24 @@ import TrainerDashboard from "./TrainerDashboard";
 import TraineeAuthentication from "./TraineeAuthentication";
 import TraineeApply from "./TraineeApply";
 
+import axios from "axios";
+
 const TrainerTraineePortal = () => {
   const [activeRole, setActiveRole] = useState("trainer"); // "trainer" or "trainee"
   const [trainerData, setTrainerData] = useState(null);
   const [traineeData, setTraineeData] = useState(null);
+  const [trainers, setTrainers] = useState([]);
+
+  // Load trainers if trainee logs in
+  useEffect(() => {
+    if (traineeData) {
+      const fetchTrainers = async () => {
+        const res = await axios.get("/api/trainers");
+        setTrainers(res.data);
+      };
+      fetchTrainers();
+    }
+  }, [traineeData]);
 
   return (
     <div className="content">
@@ -27,7 +41,7 @@ const TrainerTraineePortal = () => {
           className="picture"
         />
         <p className="story">
-          Kenyan rebel evades child marriage and Maasai curses to win power After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride, Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader
+          Kenyan rebel evades child marriage and Maasai curses to win power. After outmaneuvering her illiterate father three times by the age of 18 to escape his plans to make her a child bride, Peris Tobiko decided the only way to protect other Maasai girls in Kenya from harmful traditions was to become a leader.
         </p>
       </div>
 
@@ -49,7 +63,7 @@ const TrainerTraineePortal = () => {
           </button>
         </div>
 
-        {/* Show authentication */}
+        {/* Show authentication or dashboard */}
         {activeRole === "trainer" ? (
           !trainerData ? (
             <TrainerAuthentication onLogin={setTrainerData} />
@@ -60,7 +74,11 @@ const TrainerTraineePortal = () => {
           !traineeData ? (
             <TraineeAuthentication onLogin={setTraineeData} />
           ) : (
-            <TraineeApply traineeId={traineeData.traineeId} />
+            // Pass trainers as prop
+            <TraineeApply
+              traineeId={traineeData.traineeId}
+              trainers={trainers}
+            />
           )
         )}
       </div>

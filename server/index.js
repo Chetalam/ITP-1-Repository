@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ======= Sequelize (General App DB: Users & Opportunities) =======
+// ======= Sequelize (General DB) =======
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -35,7 +35,7 @@ const sequelize = new Sequelize(
   }
 );
 
-// ======= MySQL2 (Mentor/Mentee Logic) =======
+// ======= MySQL2 (Mentor/Mentee/Trainer Logic) =======
 const mysqlDb = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -75,25 +75,16 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// ======= Sample Routes =======
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working' });
-});
-
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
-});
-
-app.get('/api/message', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
-});
+// ======= Test Routes =======
+app.get('/api/test', (req, res) => res.json({ message: 'API is working' }));
+app.get('/api/hello', (req, res) => res.json({ message: 'Hello from the backend!' }));
 
 // ======= Auth Routes (Users) =======
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashed });
+    await User.create({ name, email, password: hashed });
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error(err);
@@ -122,17 +113,11 @@ app.get('/api/opportunities', async (req, res) => {
 app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req, res) => {
   const { title, description, category } = req.body;
   const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
-  const opportunity = await Opportunity.create({
-    title,
-    description,
-    category,
-    fileUrl,
-  });
+  const opportunity = await Opportunity.create({ title, description, category, fileUrl });
   res.status(201).json(opportunity);
 });
 
-// ======= Mentor Routes (MySQL2) =======
-// Register Mentor
+// ======= Mentor Routes =======
 app.post('/api/mentor/register', async (req, res) => {
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
@@ -143,65 +128,50 @@ app.post('/api/mentor/register', async (req, res) => {
   res.json({ message: 'Mentor registered successfully' });
 });
 
-// Login Mentor
 app.post('/api/mentor/login', async (req, res) => {
   const { email, password } = req.body;
-  const [rows] = await mysqlDb.query(
-    'SELECT * FROM mentor_signing WHERE email = ?',
-    [email]
-  );
-  if (rows.length === 0)
-    return res.status(401).json({ error: 'Invalid credentials' });
+  const [rows] = await mysqlDb.query('SELECT * FROM mentor_signing WHERE email = ?', [email]);
+  if (rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
 
   const mentor = rows[0];
   const isMatch = await bcrypt.compare(password, mentor.password);
-  if (!isMatch)
-    return res.status(401).json({ error: 'Invalid credentials' });
+  if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
-  res.json({
-    message: 'Login successful',
-    mentorId: mentor.id,
-    name: mentor.name,
-  });
+  res.json({ mentorId: mentor.id, name: mentor.name });
 });
 
-// List All Mentors
 app.get('/api/mentors', async (req, res) => {
-  const [mentors] = await mysqlDb.query(
-    'SELECT id, name, email FROM mentor_signing'
-  );
+  const [mentors] = await mysqlDb.query('SELECT id, name, email FROM mentor_signing');
   res.json(mentors);
 });
 
-// Mentor Dashboard
 app.get('/api/mentor/:id/dashboard', async (req, res) => {
   const mentorId = req.params.id;
-  const [mentees] = await mysqlDb.query(
-    'SELECT * FROM user_mentee WHERE mentor_id = ?',
-    [mentorId]
-  );
+  const [mentees] = await mysqlDb.query('SELECT * FROM user_mentee WHERE mentor_id = ?', [mentorId]);
   res.json({ menteeCount: mentees.length, mentees });
 });
 
-
-// ======= Mentee Routes (MySQL2) =======
+// ======= Mentee Routes =======
 app.post('/api/mentee/register', async (req, res) => {
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
-  await mysqlDb.query('INSERT INTO user_mentee (name, email, password) VALUES (?, ?, ?)', [name, email, hashed]);
+  await mysqlDb.query(
+    'INSERT INTO user_mentee (name, email, password) VALUES (?, ?, ?)',
+    [name, email, hashed]
+  );
   res.json({ message: 'Mentee registered successfully' });
 });
 
 app.post('/api/mentee/login', async (req, res) => {
   const { email, password } = req.body;
   const [rows] = await mysqlDb.query('SELECT * FROM user_mentee WHERE email = ?', [email]);
-  if (rows.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
+  if (rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
 
   const mentee = rows[0];
   const isMatch = await bcrypt.compare(password, mentee.password);
-  if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+  if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
-  res.json({ message: 'Login successful', menteeId: mentee.id, name: mentee.name });
+  res.json({ menteeId: mentee.id, name: mentee.name });
 });
 
 app.post('/api/mentee/:id/apply', async (req, res) => {
@@ -211,23 +181,61 @@ app.post('/api/mentee/:id/apply', async (req, res) => {
   res.json({ message: 'Applied to mentor successfully' });
 });
 
-// ======= Extra Route Alias (/api/register) =======
-app.post('/api/register', async (req, res) => {
+// ======= Trainer Routes =======
+app.post('/api/trainer/register', async (req, res) => {
   const { name, email, password } = req.body;
-  try {
-    const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashed });
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: 'Email already exists' });
-  }
+  const hashed = await bcrypt.hash(password, 10);
+  const [existing] = await mysqlDb.query('SELECT id FROM trainers WHERE email = ?', [email]);
+  if (existing.length) return res.status(400).json({ error: 'Email already registered' });
+
+  await mysqlDb.query(
+    'INSERT INTO trainers (name, email, password_hash) VALUES (?, ?, ?)',
+    [name, email, hashed]
+  );
+  res.json({ message: 'Trainer registered successfully' });
+});
+
+app.post('/api/trainer/login', async (req, res) => {
+  const { email, password } = req.body;
+  const [rows] = await mysqlDb.query('SELECT * FROM trainers WHERE email = ?', [email]);
+  if (!rows.length) return res.status(401).json({ error: 'Invalid email or password' });
+
+  const trainer = rows[0];
+  const valid = await bcrypt.compare(password, trainer.password_hash);
+  if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
+
+  res.json({ trainerId: trainer.id, name: trainer.name });
+});
+
+app.get('/api/trainers', async (req, res) => {
+  const [trainers] = await mysqlDb.query('SELECT id, name FROM trainers ORDER BY name ASC');
+  res.json(trainers);
+});
+
+app.post('/api/trainee/:traineeId/apply', async (req, res) => {
+  const { trainerId } = req.body;
+  const traineeId = req.params.traineeId;
+
+  const [trainerRows] = await mysqlDb.query('SELECT id FROM trainers WHERE id = ?', [trainerId]);
+  if (!trainerRows.length) return res.status(400).json({ error: 'Trainer not found' });
+
+  const [existingRows] = await mysqlDb.query(
+    'SELECT id FROM applications WHERE trainee_id = ? AND trainer_id = ?',
+    [traineeId, trainerId]
+  );
+  if (existingRows.length) return res.status(400).json({ error: 'You have already applied to this trainer' });
+
+  await mysqlDb.query(
+    'INSERT INTO applications (trainee_id, trainer_id) VALUES (?, ?)',
+    [traineeId, trainerId]
+  );
+  res.json({ message: 'Application submitted' });
 });
 
 // ======= Donor Routes =======
 app.post('/api/donor/register', (req, res) => {
   const { name, email, password } = req.body;
-  console.log('Registering donor:', name, email);
+  console.log('Donor register:', name, email);
   res.json({ message: 'Donor registered successfully', donorId: 1 });
 });
 
@@ -238,10 +246,7 @@ app.post('/api/donor/login', (req, res) => {
 });
 
 app.get('/api/donor', (req, res) => {
-  res.json([
-    { id: 1, name: 'Donor A' },
-    { id: 2, name: 'Donor B' }
-  ]);
+  res.json([{ id: 1, name: 'Donor A' }, { id: 2, name: 'Donor B' }]);
 });
 
 // ======= Scholar Routes =======
@@ -260,9 +265,7 @@ app.post('/api/scholar/login', (req, res) => {
 app.post('/api/scholar/:scholarId/apply', (req, res) => {
   const { scholarId } = req.params;
   const { donorId } = req.body;
-
   console.log(`Scholar ${scholarId} applying to donor ${donorId}`);
-
   res.json({ message: `Scholar ${scholarId} applied to donor ${donorId}` });
 });
 
