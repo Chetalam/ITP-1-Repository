@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// Read input data
+// Read data
 $data = json_decode(file_get_contents("php://input"), true);
 
 // Validate
@@ -14,11 +14,10 @@ if (!isset($data['name'], $data['email'], $data['password'])) {
 
 $name = $data['name'];
 $email = $data['email'];
-$password = password_hash($data['password'], PASSWORD_BCRYPT); // Secure password hashing
+$password = password_hash($data['password'], PASSWORD_BCRYPT);
 
 include 'connect.php';
 
-// Insert new mentee
 $sql = "INSERT INTO user_mentee (name, email, password) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $name, $email, $password);
@@ -32,3 +31,4 @@ if ($stmt->execute()) {
 $stmt->close();
 $conn->close();
 ?>
+
