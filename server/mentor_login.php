@@ -3,10 +3,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// Read input
+// Get input
 $data = json_decode(file_get_contents("php://input"), true);
-
-// Validate
 if (!isset($data['email'], $data['password'])) {
     echo json_encode(['success' => false, 'message' => 'Missing email or password']);
     exit;
@@ -17,27 +15,18 @@ $password = $data['password'];
 
 include 'connect.php';
 
-$sql = "SELECT id, name, password FROM mentor_signin WHERE email = ?";
+// Check if email and password match
+$sql = "SELECT * FROM mentor_signin WHERE email = ? AND password = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email);
+$stmt->bind_param("ss", $email, $password);
 $stmt->execute();
 $result = $stmt->get_result();
 
-if ($result->num_rows === 1) {
+if ($result->num_rows > 0) {
     $mentor = $result->fetch_assoc();
-
-    if (password_verify($password, $mentor['password'])) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Login successful',
-            'mentorId' => $mentor['id'],
-            'name' => $mentor['name']
-        ]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Incorrect password']);
-    }
+    echo json_encode(['success' => true, 'mentorId' => $mentor['id'], 'name' => $mentor['name']]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Email not found']);
+    echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
 }
 
 $stmt->close();
