@@ -43,12 +43,22 @@ const mysqlDb = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-// ======= Sequelize Models =======
+// ======= Sequelize Models (Simplified User Model) =======
 const User = sequelize.define('User', {
-  name: DataTypes.STRING,
-  email: { type: DataTypes.STRING, unique: true },
-  password: DataTypes.STRING,
-  role: { type: DataTypes.ENUM('user', 'admin'), defaultValue: 'user' },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+  },
+}, {
+  timestamps: false, // <== THIS disables createdAt/updatedAt
 });
 
 const Opportunity = sequelize.define('Opportunity', {
@@ -84,7 +94,7 @@ app.get('/', (req, res) => {
 app.get('/api/test', (req, res) => res.json({ message: 'API is working' }));
 app.get('/api/hello', (req, res) => res.json({ message: 'Hello from the backend!' }));
 
-// ✅ Lightweight register test
+// Lightweight register test
 app.post('/api/register-test', (req, res) => {
   const { email, password } = req.body;
   res.json({
@@ -93,21 +103,38 @@ app.post('/api/register-test', (req, res) => {
   });
 });
 
-// ✅ Lightweight register route from Code 2
-app.post('/api/register', (req, res) => {
-  const { email, password } = req.body;
-  res.json({
-    message: 'User registered successfully',
-    email,
-  });
+// ======= REPLACED: User Register Route with Real Logic =======
+app.post('/api/register', async (req, res) => {
+  const { name, email, phone } = req.body;
+
+  try {
+    // Check if user exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already registered' });
+    }
+
+    // Create user with name and phone
+    const newUser = await User.create({ name, email, phone });
+
+    res.status(201).json({
+      message: 'User registered successfully',
+      userId: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      phone: newUser.phone,
+    });
+  } catch (error) {
+    console.error('❌ Error registering user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // ======= Auth Routes (Users) =======
 app.post('/api/auth/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email } = req.body;
   try {
-    const hashed = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashed });
+    await User.create({ email }); // ✅ No password stored
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error(err);
@@ -116,15 +143,11 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
   const user = await User.findOne({ where: { email } });
   if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
-
-  const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET);
-  res.json({ token });
+  res.json({ message: 'Login successful', userId: user.id });
 });
 
 // ======= Opportunities =======
