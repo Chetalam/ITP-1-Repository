@@ -21,7 +21,7 @@ function RegisterForm() {
     e.preventDefault();
     try {
       // THIS is the line that calls your backend:
-      const res = await axios.post("http://localhost:5000/api/register", formData);
+      const res = await axios.post('http://localhost:5000/api/register', formData);
       console.log(res.data);
       setMessage(res.data.message || "Registration successful!");
     } catch (err) {

@@ -75,9 +75,32 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+// ======= Root Test Route =======
+app.get('/', (req, res) => {
+  res.send('API is working');
+});
+
 // ======= Test Routes =======
 app.get('/api/test', (req, res) => res.json({ message: 'API is working' }));
 app.get('/api/hello', (req, res) => res.json({ message: 'Hello from the backend!' }));
+
+// ✅ Lightweight register test
+app.post('/api/register-test', (req, res) => {
+  const { email, password } = req.body;
+  res.json({
+    message: 'User register-test endpoint hit successfully',
+    email,
+  });
+});
+
+// ✅ Lightweight register route from Code 2
+app.post('/api/register', (req, res) => {
+  const { email, password } = req.body;
+  res.json({
+    message: 'User registered successfully',
+    email,
+  });
+});
 
 // ======= Auth Routes (Users) =======
 app.post('/api/auth/register', async (req, res) => {
