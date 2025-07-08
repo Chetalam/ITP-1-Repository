@@ -21,7 +21,7 @@ const MentorAuthentication = ({ onLogin }) => {
           alert(res.data.message || 'Login failed. Please check your credentials.');
         }
       } else {
-        const res = await axios.post('http://localhost/ITP-1-Repository/server/mentor_register.php', form);
+        const res = await axios.post('http://localhost/ITP-1-Repository/server/mentor_login.php', form);
         
         if (res.data.success) {
           alert('Registered successfully! You can now log in.');
