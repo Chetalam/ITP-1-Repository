@@ -15,7 +15,15 @@ const DonorScholarPortal = () => {
     <div className="content">
       {/* Left */}
       <div className="left-section">
-        <h1>Why Scholarships Matter</h1>
+        <h1>
+          {activeRole === 'donor' ? 'Donor Portal' : 'Scholar Portal'}
+        </h1>
+        <p>
+          {activeRole === 'donor'
+            ? 'Register or log in to sponsor scholars and see your dashboard.'
+            : 'Register or log in to apply for sponsorships and connect with donors.'}
+        </p>
+        <h2>Why Scholarships Matter</h2>
         <p>
           Sponsorship fosters growth, learning, and empowerment for both donors and scholars.
           It can change lives by providing access to education and resources.

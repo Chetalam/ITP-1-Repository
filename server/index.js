@@ -135,10 +135,7 @@ app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req
 app.post('/api/mentor/register', async (req, res) => {
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
-  await mysqlDb.query(
-    'INSERT INTO mentor_signing (name, email, password) VALUES (?, ?, ?)',
-    [name, email, hashed]
-  );
+  await mysqlDb.query('INSERT INTO mentor_signing (name, email, password) VALUES (?, ?, ?)', [name, email, hashed]);
   res.json({ message: 'Mentor registered successfully' });
 });
 
@@ -156,10 +153,7 @@ app.post('/api/mentor/login', async (req, res) => {
 
 app.get('/api/mentor/:id/dashboard', async (req, res) => {
   const mentorId = req.params.id;
-  const [mentees] = await mysqlDb.query(
-    'SELECT * FROM user_mentee WHERE mentor_id = ?',
-    [mentorId]
-  );
+  const [mentees] = await mysqlDb.query('SELECT * FROM user_mentee WHERE mentor_id = ?', [mentorId]);
   res.json({ menteeCount: mentees.length, mentees });
 });
 
@@ -167,10 +161,7 @@ app.get('/api/mentor/:id/dashboard', async (req, res) => {
 app.post('/api/mentee/register', async (req, res) => {
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
-  await mysqlDb.query(
-    'INSERT INTO user_mentee (name, email, password) VALUES (?, ?, ?)',
-    [name, email, hashed]
-  );
+  await mysqlDb.query('INSERT INTO user_mentee (name, email, password) VALUES (?, ?, ?)', [name, email, hashed]);
   res.json({ message: 'Mentee registered successfully' });
 });
 
@@ -204,6 +195,48 @@ app.post('/api/register', async (req, res) => {
     console.error(err);
     res.status(400).json({ error: 'Email already exists' });
   }
+});
+
+// ======= Donor Routes =======
+app.post('/api/donor/register', (req, res) => {
+  const { name, email, password } = req.body;
+  console.log('Registering donor:', name, email);
+  res.json({ message: 'Donor registered successfully', donorId: 1 });
+});
+
+app.post('/api/donor/login', (req, res) => {
+  const { email, password } = req.body;
+  console.log('Donor login:', email);
+  res.json({ message: 'Donor login successful', donorId: 1 });
+});
+
+app.get('/api/donor', (req, res) => {
+  res.json([
+    { id: 1, name: 'Donor A' },
+    { id: 2, name: 'Donor B' }
+  ]);
+});
+
+// ======= Scholar Routes =======
+app.post('/api/scholar/register', (req, res) => {
+  const { name, email, password } = req.body;
+  console.log('Scholar register:', name, email);
+  res.json({ message: 'Scholar registered successfully', scholarId: 1 });
+});
+
+app.post('/api/scholar/login', (req, res) => {
+  const { email, password } = req.body;
+  console.log('Scholar login:', email);
+  res.json({ message: 'Scholar login successful', scholarId: 1 });
+});
+
+app.post('/api/scholar/:scholarId/apply', (req, res) => {
+  const { scholarId } = req.params;
+  const { donorId } = req.body;
+
+  console.log(`Scholar ${scholarId} applying to donor ${donorId}`);
+
+  res.json({ message: `Scholar ${scholarId} applied to donor ${donorId}` });
 });
 
 // ======= Start Server =======
