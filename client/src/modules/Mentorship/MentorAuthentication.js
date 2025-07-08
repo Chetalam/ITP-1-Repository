@@ -10,16 +10,26 @@ const MentorAuthentication = ({ onLogin }) => {
 
     try {
       if (isLogin) {
-        const res = await axios.post('/api/mentor/login', {
+        const res = await axios.post('http://localhost/ITP-1-Repository/server/mentor_login.php', {
           email: form.email,
           password: form.password,
         });
-        onLogin(res.data); // Pass mentor data to parent
+
+        if (res.data.success) {
+          onLogin(res.data); // Pass mentor data to parent
+        } else {
+          alert(res.data.message || 'Login failed. Please check your credentials.');
+        }
       } else {
-        await axios.post('/api/mentor/register', form);
-        alert('Registered successfully! You can now log in.');
-        setIsLogin(true);
-        setForm({ name: '', email: '', password: '' });
+        const res = await axios.post('http://localhost/ITP-1-Repository/server/mentor_register.php', form);
+        
+        if (res.data.success) {
+          alert('Registered successfully! You can now log in.');
+          setIsLogin(true);
+          setForm({ name: '', email: '', password: '' });
+        } else {
+          alert(res.data.message || 'Registration failed.');
+        }
       }
     } catch (err) {
       console.error(err);
