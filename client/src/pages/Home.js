@@ -15,7 +15,7 @@ function Home() {
     setStatus('loading');
 
     try {
-      const res = await fetch("http://localhost/ITP-1-Repository/server/register.php", {
+      const res = await fetch('http://localhost:5000/api/register', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
