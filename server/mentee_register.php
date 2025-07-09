@@ -14,7 +14,7 @@ if (!isset($data['name'], $data['email'], $data['password'])) {
 
 $name = $data['name'];
 $email = $data['email'];
-$password = $data['password']; // plain password for now
+$password = $data['password'];
 
 $sql = "INSERT INTO mentee (name, email, password) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
@@ -24,7 +24,7 @@ if ($stmt) {
     if ($stmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Mentee registered successfully']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to register: ' . $stmt->error]);
+        echo json_encode(['success' => false, 'message' => 'Registration failed: ' . $stmt->error]);
     }
     $stmt->close();
 } else {
@@ -32,4 +32,3 @@ if ($stmt) {
 }
 
 $conn->close();
-?>
