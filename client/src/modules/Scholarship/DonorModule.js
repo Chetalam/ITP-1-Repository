@@ -77,37 +77,42 @@ const DonorModule = () => {
         <h1>Sponsorship Opportunities</h1>
         <ul className="sponsorship-list">
           <li>
-            <a href="https://femiscope.org/" target="_blank" rel="noopener noreferrer">
-              Femiscope Initiative (Githurai 44, Nairobi)
+            <a href="https://ngaaf.go.ke/programs/" target="_blank" rel="noopener noreferrer">
+              National Government Affirmative Action Fund (NGAAF)
             </a>
           </li>
           <li>
-            <a href="https://passiontosharefoundation.org/mentorship-program/" target="_blank" rel="noopener noreferrer">
-              Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)
+            <a href="https://www.kiswcd.co.ke/scholarships/" target="_blank" rel="noopener noreferrer">
+              Kenya Institute of Social Work & Community Development (KISWCD)
             </a>
           </li>
           <li>
-            <a href="https://swahiba.org/mentorship-empowerment-program/" target="_blank" rel="noopener noreferrer">
-              Swahiba Networks – Mentorship & Empowerment Program (MEP)
+            <a href="https://villagevolunteers.org/country/butterfly-project-scholarships/" target="_blank" rel="noopener noreferrer">
+              Butterfly Project Scholarships
             </a>
           </li>
           <li>
-            <a href="https://hopeforgirls.or.ke/mentorship/" target="_blank" rel="noopener noreferrer">
-              HOPE for Girls @ VISA
+            <a href="https://www.kiberayouth.org/kibera-girls-scholarship-program" target="_blank" rel="noopener noreferrer">
+              Kibera Girls Scholarship Program
             </a>
           </li>
           <li>
-            <a href="https://mentormatchkenya.com/" target="_blank" rel="noopener noreferrer">
-              Mentor Match Kenya
+            <a href="https://maasaigirlseducation.org/what-we-do/scholarship-program/" target="_blank" rel="noopener noreferrer">
+              Maasai Girls Education Fund (MGEF)
             </a>
           </li>
           <li>
-            <a href="https://www.centerformentorship.co.ke/" target="_blank" rel="noopener noreferrer">
-              Center for Mentorship & Counselling
+            <a href="https://www.amazinggirls.org/amazing-scholarship-program" target="_blank" rel="noopener noreferrer">
+              Amazing Maasai Girls Project
+            </a>
+          </li>
+          <li>
+            <a href="https://themaarifafoundation.org/education-bursaries/" target="_blank" rel="noopener noreferrer">
+              Maarifa Foundation
             </a>
           </li>
         </ul>
-
+          
         {/* Authentication / Dashboard */}
         {activeRole === 'donor' ? (
           donorData ? (

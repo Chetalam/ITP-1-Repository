@@ -25,15 +25,15 @@ function AboutUs() {
   const faqs = [
     {
       question: "Who can join the platform?",
-      answer: "Any young woman in Kenya, especially those from marginalized communities, is welcome to join."
+      answer: "Any woman in Kenya, especially those from marginalized communities, is welcome to join."
     },
     {
-      question: "How do I apply for a scholarship?",
-      answer: "You can browse available scholarships on our platform and apply directly through the provided links."
+      question: "How do I apply for an opportunity?",
+      answer: "Kindly browse on any section and apply to a mentor, scholarship donor, leadership trainer or even see some of the empowerment opportunities available on the web."
     },
     {
       question: "How can I become a mentor?",
-      answer: "Contact us through the 'Get in Touch' page, and our team will guide you through the onboarding process."
+      answer: "Please browse on the mentorship section and register yourself as a mentor."
     }
   ];
 
@@ -45,7 +45,7 @@ function AboutUs() {
         by bridging the opportunity gap through technology.
       </p>
       <p>
-        Every girl deserves a fair chance to learn, grow, and lead. Whether from a rural village or urban town, we believe
+        Every girl deserves a fair chance to learn, grow, and lead. Whether from a rural village or an urban town, we believe
         every young woman should have equal access to resources that help unlock her potential.
       </p>
       <p>

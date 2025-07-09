@@ -75,33 +75,33 @@ const TrainerModule = () => {
         <h1>Training Opportunities</h1>
         <ul className="mentorship-list">
           <li>
-            <a href="https://femiscope.org/" target="_blank" rel="noopener noreferrer">
-              Femiscope Initiative (Githurai 44, Nairobi)
+            <a href="https://woswa.org/" target="_blank" rel="noopener noreferrer">
+              WOSWA (Women Students Mentorship Association)
             </a>
           </li>
           <li>
-            <a href="https://passiontosharefoundation.org/mentorship-program/" target="_blank" rel="noopener noreferrer">
-              Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)
+            <a href="https://afwag.org/our-network/kenya/" target="_blank" rel="noopener noreferrer">
+              Alliance for Women & Girls – Samburu Girls Foundation
             </a>
           </li>
           <li>
-            <a href="https://swahiba.org/mentorship-empowerment-program/" target="_blank" rel="noopener noreferrer">
-              Swahiba Networks – Mentorship & Empowerment Program (MEP)
+            <a href="https://www.seedsofhopeke.org/" target="_blank" rel="noopener noreferrer">
+              Seeds of Hope Kenya (Kisii & Nyamira)
             </a>
           </li>
           <li>
-            <a href="https://hopeforgirls.or.ke/mentorship/" target="_blank" rel="noopener noreferrer">
-              HOPE for Girls @ VISA
+            <a href="https://www.risingwomen-kenya.org/" target="_blank" rel="noopener noreferrer">
+              Rising Women Organization (Nairobi slums)
             </a>
           </li>
           <li>
-            <a href="https://mentormatchkenya.com/" target="_blank" rel="noopener noreferrer">
-              Mentor Match Kenya
+            <a href="https://afwag.org/our-network/kenya/?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer">
+              Pendo Tendo Initiative (Kajiado) (Part of AFWAG network)
             </a>
           </li>
           <li>
-            <a href="https://www.centerformentorship.co.ke/" target="_blank" rel="noopener noreferrer">
-              Center for Mentorship & Counselling
+            <a href="https://www.risingwomen-kenya.org/" target="_blank" rel="noopener noreferrer">
+              Waste No Talent Kenya
             </a>
           </li>
         </ul>
