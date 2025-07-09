@@ -28,8 +28,8 @@ function AboutUs() {
       answer: "Any woman in Kenya, especially those from marginalized communities, is welcome to join."
     },
     {
-      question: "How do I apply for a scholarship?",
-      answer: "Kindly browse on the scholarship section and apply to a scholarship donor or even see some of the scholarship opportunities available."
+      question: "How do I apply for an opportunity?",
+      answer: "Kindly browse on any section and apply to a mentor, scholarship donor, leadership trainer or even see some of the empowerment opportunities available on the web."
     },
     {
       question: "How can I become a mentor?",
@@ -45,7 +45,7 @@ function AboutUs() {
         by bridging the opportunity gap through technology.
       </p>
       <p>
-        Every girl deserves a fair chance to learn, grow, and lead. Whether from a rural village or urban town, we believe
+        Every girl deserves a fair chance to learn, grow, and lead. Whether from a rural village or an urban town, we believe
         every young woman should have equal access to resources that help unlock her potential.
       </p>
       <p>
