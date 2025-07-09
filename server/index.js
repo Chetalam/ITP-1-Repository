@@ -43,7 +43,7 @@ const mysqlDb = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-// ======= Sequelize Models (Simplified User Model) =======
+// ======= Sequelize Models =======
 const User = sequelize.define('User', {
   name: {
     type: DataTypes.STRING,
@@ -58,7 +58,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
   },
 }, {
-  timestamps: false, // <== THIS disables createdAt/updatedAt
+  timestamps: false,
 });
 
 const Opportunity = sequelize.define('Opportunity', {
@@ -90,6 +90,11 @@ app.get('/', (req, res) => {
   res.send('API is working');
 });
 
+// ======= Status Route =======
+app.get('/api/status', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // ======= Test Routes =======
 app.get('/api/test', (req, res) => res.json({ message: 'API is working' }));
 app.get('/api/hello', (req, res) => res.json({ message: 'Hello from the backend!' }));
@@ -103,16 +108,14 @@ app.post('/api/register-test', (req, res) => {
   });
 });
 
-// ======= REPLACED: User Register Route with Real Logic =======
+// ======= User Register Route =======
 app.post('/api/register', async (req, res) => {
   const { name, email, phone } = req.body;
 
   try {
-    // Check if user exists
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser) {
-      // ✅ Instead of error, return success and mark alreadyRegistered
       return res.status(200).json({
         message: 'User already registered. Logging you in.',
         alreadyRegistered: true,
@@ -123,7 +126,6 @@ app.post('/api/register', async (req, res) => {
       });
     }
 
-    // Create user with name and phone
     const newUser = await User.create({ name, email, phone });
 
     res.status(201).json({
@@ -143,7 +145,7 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/auth/register', async (req, res) => {
   const { email } = req.body;
   try {
-    await User.create({ email }); // ✅ No password stored
+    await User.create({ email });
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error(err);
