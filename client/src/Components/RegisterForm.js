@@ -1,13 +1,16 @@
-// client/src/components/RegisterForm.js
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function RegisterForm() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -20,12 +23,17 @@ function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // THIS is the line that calls your backend:
-      const res = await axios.post('http://localhost:5000/api/register', formData);
+      const res = await axios.post("http://localhost:5000/api/register", formData);
       console.log(res.data);
-      setMessage(res.data.message || "Registration successful!");
+
+      if (res.data.alreadyRegistered || res.status === 201) {
+        localStorage.setItem("isLoggedIn", "true");
+        navigate("/about"); // Smooth redirect on success
+      } else {
+        setMessage(res.data.message || "Something went wrong.");
+      }
     } catch (err) {
-      console.error(err.response?.data || err.message);
+      console.error("Registration error:", err);
       setMessage(err.response?.data?.error || "Registration failed.");
     }
   };
@@ -40,6 +48,7 @@ function RegisterForm() {
           placeholder="Name"
           value={formData.name}
           onChange={handleChange}
+          required
         />
         <br />
         <input
@@ -48,6 +57,7 @@ function RegisterForm() {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
+          required
         />
         <br />
         <input
@@ -56,6 +66,7 @@ function RegisterForm() {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          required
         />
         <br />
         <button type="submit">Register</button>
