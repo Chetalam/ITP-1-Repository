@@ -3,9 +3,11 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import ProtectedRoute from './components/ProtectedRoute';
+
 import MentorModule from './modules/Mentorship/MentorModule';
 import DonorModule from './modules/Scholarship/DonorModule';
-import TrainerModule from './modules/Leadership/TrainerModule';// Update this to LeadershipPortal if you migrated
+import TrainerModule from './modules/Leadership/TrainerModule'; // or LeadershipPortal
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
@@ -38,12 +40,50 @@ function App() {
         </nav>
 
         <Routes>
+          {/* Public route */}
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/mentorship" element={<MentorModule />} />
-          <Route path="/scholarship" element={<DonorModule />} />
-          <Route path="/leadership" element={<TrainerModule />} />
+
+          {/* Protected routes */}
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <AboutUs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <ContactUs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mentorship"
+            element={
+              <ProtectedRoute>
+                <MentorModule />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/scholarship"
+            element={
+              <ProtectedRoute>
+                <DonorModule />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leadership"
+            element={
+              <ProtectedRoute>
+                <TrainerModule />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>

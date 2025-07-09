@@ -110,15 +110,24 @@ app.post('/api/register', async (req, res) => {
   try {
     // Check if user exists
     const existingUser = await User.findOne({ where: { email } });
+
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already registered' });
+      // ✅ Instead of error, return success and mark alreadyRegistered
+      return res.status(200).json({
+        message: 'User already registered. Logging you in.',
+        alreadyRegistered: true,
+        userId: existingUser.id,
+        name: existingUser.name,
+        email: existingUser.email,
+        phone: existingUser.phone,
+      });
     }
 
     // Create user with name and phone
     const newUser = await User.create({ name, email, phone });
 
     res.status(201).json({
-      message: 'User registered successfully',
+      message: 'User registered successfully.',
       userId: newUser.id,
       name: newUser.name,
       email: newUser.email,
