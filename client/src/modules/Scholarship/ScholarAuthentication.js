@@ -1,47 +1,38 @@
+// src/modules/Scholarship/ScholarAuth.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const ScholarAuthentication = ({ onLogin }) => {
+const ScholarAuth = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const endpoint = isLogin ? 'scholar_login.php' : 'scholar_register.php';
+
     try {
-      if (isLogin) {
-        const res = await axios.post('/api/scholar/login', {
-          email: form.email,
-          password: form.password,
-        });
-        onLogin(res.data);
+      const res = await axios.post(`http://localhost/ITP-1-Repository/server/${endpoint}`, form);
+      const data = res.data;
+
+      if (data.success) {
+        alert(data.message);
+        onLogin(data);
       } else {
-        await axios.post('/api/scholar/register', form);
-        alert('Registered successfully! You can now log in.');
-        setIsLogin(true);
-        setForm({ name: '', email: '', password: '' });
+        alert(data.message || 'Action failed.');
       }
     } catch (err) {
-      console.error('Authentication error:', err);
-      alert('Something went wrong. Please try again.');
+      console.error(err);
+      alert('Something went wrong.');
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-tabs">
-        <button
-          className={isLogin ? 'active' : ''}
-          onClick={() => setIsLogin(true)}
-        >
-          Login
-        </button>
-        <button
-          className={!isLogin ? 'active' : ''}
-          onClick={() => setIsLogin(false)}
-        >
-          Register
-        </button>
+        <button className={isLogin ? 'active' : ''} onClick={() => setIsLogin(true)}>Login</button>
+        <button className={!isLogin ? 'active' : ''} onClick={() => setIsLogin(false)}>Register</button>
       </div>
+
       <form onSubmit={handleSubmit}>
         <h2>Scholar {isLogin ? 'Login' : 'Register'}</h2>
         {!isLogin && (
@@ -49,11 +40,9 @@ const ScholarAuthentication = ({ onLogin }) => {
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
           />
         )}
         <input
-          type="email"
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -72,4 +61,4 @@ const ScholarAuthentication = ({ onLogin }) => {
   );
 };
 
-export default ScholarAuthentication;
+export default ScholarAuth;
