@@ -7,11 +7,11 @@ function ContactUs() {
       <p>
         We would love to hear from you!<br /> 
         Whether you have a question about our programs, want to partner with us, or are
-        simply seeking guidance—our team is here to help.
+        simply seeking guidance, our team is here to help.
       </p>
       <p>
         You can contact us via email or phone.<br />
-        We’re committed to maintaining an open channel of communication to ensure that every girl and woman who seeks help can find it.
+        We are committed to maintaining an open channel of communication to ensure that every girl and woman who seeks help can find it.
       </p>
 
       <ul>
