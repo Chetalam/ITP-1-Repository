@@ -25,15 +25,15 @@ function AboutUs() {
   const faqs = [
     {
       question: "Who can join the platform?",
-      answer: "Any young woman in Kenya, especially those from marginalized communities, is welcome to join."
+      answer: "Any woman in Kenya, especially those from marginalized communities, is welcome to join."
     },
     {
       question: "How do I apply for a scholarship?",
-      answer: "You can browse available scholarships on our platform and apply directly through the provided links."
+      answer: "Kindly browse on the scholarship section and apply to a scholarship donor or even see some of the scholarship opportunities available."
     },
     {
       question: "How can I become a mentor?",
-      answer: "Contact us through the 'Get in Touch' page, and our team will guide you through the onboarding process."
+      answer: "Please browse on the mentorship section and register yourself as a mentor."
     }
   ];
 
