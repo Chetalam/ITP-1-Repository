@@ -3,29 +3,43 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-include 'connect.php';
+require 'db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['name'], $data['email'], $data['password'])) {
-    echo json_encode(['success' => false, 'message' => 'Missing fields']);
+$name = $data['name'] ?? '';
+$email = $data['email'] ?? '';
+$password = $data['password'] ?? '';
+
+if (empty($name) || empty($email) || empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'All fields are required.']);
     exit;
 }
 
-$name = $data['name'];
-$email = $data['email'];
-$password = $data['password']; // Plaintext version (for now)
+try {
+    $stmt = $pdo->prepare("SELECT id FROM mentor WHERE email = ?");
+    $stmt->execute([$email]);
 
-$sql = "INSERT INTO mentor (name, email, password) VALUES (?, ?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $name, $email, $password);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => false, 'message' => 'Email already registered.']);
+        exit;
+    }
 
-if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Mentor registered successfully']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Mentor registration failed']);
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $pdo->prepare("INSERT INTO mentor (name, email, password) VALUES (?, ?, ?)");
+    $stmt->execute([$name, $email, $hashedPassword]);
+
+    $mentorId = $pdo->lastInsertId();
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Mentor registered successfully.',
+        'mentorId' => $mentorId,
+        'name' => $name,
+        'email' => $email
+    ]);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
 }
-
-$stmt->close();
-$conn->close();
 ?>

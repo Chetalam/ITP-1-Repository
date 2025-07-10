@@ -1,71 +1,83 @@
 import React, { useState } from "react";
 import "../../App.css";
-
 import MentorAuthentication from "./MentorAuthentication";
 import MentorDashboard from "./MentorDashboard";
-
 import MenteeAuthentication from "./MenteeAuthentication";
 import MenteeApply from "./MenteeApply";
+import MenteeDashboard from "./MenteeDashboard";
 
-const MentorMenteePortal = () => {
-  const [activeRole, setActiveRole] = useState("mentor"); // "mentor" or "mentee"
+const MentorMenteeModule = () => {
+  const [role, setRole] = useState("mentor"); // "mentor" or "mentee"
   const [mentorData, setMentorData] = useState(null);
   const [menteeData, setMenteeData] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleApplied = () => setRefreshKey((k) => k + 1);
 
   return (
     <div className="content">
       {/* Left Section */}
       <div className="left-section">
-        <h1>Why Mentorship Matters</h1>
+        <h1>{role === "mentor" ? "Mentor Portal" : "Mentee Portal"}</h1>
         <p>
-          Mentorship fosters growth, learning, and empowerment for both mentors and mentees.
-        </p>
-        <h2>Real Mentorship Experience</h2>
-        <img
-          src="/images/Solidarityfortheadvancementofwomensagenda.jpg"
-          alt="Mentorship Session"
-          className="picture"
-        />
-        <p className="story">
-          Four girls were admitted into a two-month training at SAWA in 2012. They learned communication, health, and career skills that empowered them.
+          {role === "mentor"
+            ? "Mentors can log in or register below."
+            : "Mentees can register, log in, and apply to a mentor here."}
         </p>
       </div>
 
       {/* Right Section */}
       <div className="right-section">
-        {/* Top Role Tabs */}
-        <div className="auth-tabs">
+        {/* Mentorship Opportunities at the top */}
+        <div className="opportunities-list">
+          <h2>Mentorship Opportunities</h2>
+          <ul>
+            <li>Center for Mentorship & Counselling</li>
+            <li>SAWA Girls Empowerment Program</li>
+            <li>Equity Group Mentorship</li>
+            <li>Kenya Women Mentorship Network</li>
+            <li>Akili Dada Young Women Leaders</li>
+            <li>MentorNet Africa</li>
+            <li>Global Give Back Circle</li>
+          </ul>
+        </div>
+        {/* Role Tabs directly below opportunities */}
+        <div className="role-tabs" style={{ marginTop: '0.5rem' }}>
           <button
-            className={activeRole === "mentor" ? "active" : ""}
-            onClick={() => setActiveRole("mentor")}
+            className={role === "mentor" ? "active" : ""}
+            onClick={() => setRole("mentor")}
           >
             Mentor
           </button>
           <button
-            className={activeRole === "mentee" ? "active" : ""}
-            onClick={() => setActiveRole("mentee")}
+            className={role === "mentee" ? "active" : ""}
+            onClick={() => setRole("mentee")}
           >
             Mentee
           </button>
         </div>
-
-        {/* Show authentication */}
-        {activeRole === "mentor" ? (
-          !mentorData ? (
-            <MentorAuthentication onLogin={setMentorData} />
-          ) : (
+        {/* Auth and dashboard below role tabs */}
+        {role === "mentor" ? (
+          mentorData ? (
             <MentorDashboard mentorId={mentorData.mentorId} />
+          ) : (
+            <MentorAuthentication onLogin={setMentorData} />
           )
         ) : (
-          !menteeData ? (
+          // Mentee Section: Always show authentication
+          <>
             <MenteeAuthentication onLogin={setMenteeData} />
-          ) : (
-            <MenteeApply menteeId={menteeData.menteeId} />
-          )
+            {menteeData && (
+              <>
+                <MenteeDashboard menteeId={menteeData.menteeId} refreshKey={refreshKey} />
+                <MenteeApply menteeId={menteeData.menteeId} onApplied={handleApplied} />
+              </>
+            )}
+          </>
         )}
       </div>
     </div>
   );
 };
 
-export default MentorMenteePortal;
+export default MentorMenteeModule;

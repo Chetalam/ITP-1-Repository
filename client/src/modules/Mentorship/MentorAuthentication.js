@@ -21,7 +21,12 @@ const MentorAuthentication = ({ onLogin }) => {
           alert(res.data.message || 'Login failed. Please check your credentials.');
         }
       } else {
-        const res = await axios.post('http://localhost/ITP-1-Repository/server/mentor_login.php', form);
+        // Registration should POST to mentor_register.php, not mentor_login.php
+        const res = await axios.post('http://localhost/ITP-1-Repository/server/mentor_register.php', {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+        });
         
         if (res.data.success) {
           alert('Registered successfully! You can now log in.');
@@ -60,18 +65,22 @@ const MentorAuthentication = ({ onLogin }) => {
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
           />
         )}
         <input
+          type="email"
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
         />
         <input
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
         />
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>

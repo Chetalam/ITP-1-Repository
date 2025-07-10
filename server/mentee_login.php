@@ -3,47 +3,36 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-include 'connect.php';
+require 'db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Validate inputs
-if (!isset($data['email'], $data['password'])) {
-    echo json_encode(['success' => false, 'message' => 'Missing email or password']);
+$email = trim($data['email'] ?? '');
+$password = trim($data['password'] ?? '');
+
+if (empty($email) || empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'Missing email or password.']);
     exit;
 }
 
-$email = trim($data['email']);
-$password = trim($data['password']);
+try {
+    $stmt = $pdo->prepare("SELECT id, name, email, password FROM mentee WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Prepare and run the SELECT query
-$sql = "SELECT * FROM mentee WHERE email = ?";
-$stmt = $conn->prepare($sql);
-
-if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $conn->error]);
-    exit;
-}
-
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Check if user exists
-if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
-
-    // Compare plain password
-    if ($user['password'] === $password) {
-        echo json_encode(['success' => true, 'message' => 'Mentee login successful']);
+    if ($user && password_verify($password, $user['password'])) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Login successful.',
+            'menteeId' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email']
+        ]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Incorrect password']);
+        echo json_encode(['success' => false, 'message' => 'Invalid credentials.']);
     }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Email not found']);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
 }
-
-$stmt->close();
-$conn->close();
 ?>
 

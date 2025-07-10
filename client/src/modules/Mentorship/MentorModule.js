@@ -5,19 +5,23 @@ import MentorAuthentication from './MentorAuthentication';
 import MenteeAuthentication from './MenteeAuthentication';
 import MentorDashboard from './MentorDashboard';
 import MenteeApply from './MenteeApply';
+import MenteeDashboard from './MenteeDashboard';
 
 const MentorModule = () => {
   const [activeRole, setActiveRole] = useState('mentor'); // "mentor" or "mentee"
   const [mentorData, setMentorData] = useState(null);
   const [menteeData, setMenteeData] = useState(null);
   const [mentors, setMentors] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     axios
-      .get('/api/mentors')
+      .get('http://localhost/ITP-1-Repository/server/get_mentors.php')
       .then((res) => setMentors(res.data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [refreshKey]);
+
+  const handleApplied = () => setRefreshKey((k) => k + 1);
 
   return (
     <div className="content">
@@ -47,7 +51,7 @@ const MentorModule = () => {
         {mentors.length > 0 ? (
           <ul>
             {mentors.map((m) => (
-              <li key={m.id}>{m.name}</li>
+              <li key={m.id}>{m.name} ({m.email})</li>
             ))}
           </ul>
         ) : (
@@ -116,7 +120,10 @@ const MentorModule = () => {
             <MentorAuthentication onLogin={setMentorData} />
           )
         ) : menteeData ? (
-          <MenteeApply menteeId={menteeData.menteeId} />
+          <>
+            <MenteeDashboard menteeId={menteeData.menteeId} refreshKey={refreshKey} />
+            <MenteeApply menteeId={menteeData.menteeId} onApplied={handleApplied} />
+          </>
         ) : (
           <MenteeAuthentication onLogin={setMenteeData} />
         )}
