@@ -16,7 +16,7 @@ $email = $data['email'];
 $password = $data['password'];
 
 // Fetch trainer by email
-$sql = "SELECT * FROM trainer WHERE email = ?";
+$sql = "SELECT * FROM trainer_users WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
