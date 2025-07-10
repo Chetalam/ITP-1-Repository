@@ -8,31 +8,30 @@ const TrainerAuthentication = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const url = isLogin
-        ? "http://localhost/ITP-1-Repository/server/trainer_login.php"
-        : "http://localhost/ITP-1-Repository/server/trainer_register.php";
+        ? "http://localhost/your-folder/trainer_login.php"
+        : "http://localhost/your-folder/trainer_register.php";
 
-      const payload = isLogin
-        ? { email: form.email, password: form.password }
-        : form;
-
-      const response = await axios.post(url, payload);
+      const response = await axios.post(url, form);
 
       if (response.data.success) {
         alert(response.data.message);
-        if (isLogin && onLogin) {
-          onLogin(response.data); // Pass user info to parent component
+
+        if (isLogin) {
+          // Pass user data to parent on successful login
+          onLogin(response.data.user);
         } else {
-          // Reset form and switch to login view
-          setIsLogin(true);
+          // Reset form and switch to login mode after successful registration
           setForm({ name: '', email: '', password: '' });
+          setIsLogin(true);
         }
       } else {
         alert(response.data.message || "Action failed.");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error:", error);
       alert("Something went wrong. Please try again.");
     }
   };
@@ -60,7 +59,7 @@ const TrainerAuthentication = ({ onLogin }) => {
         {!isLogin && (
           <input
             type="text"
-            placeholder="Full Name"
+            placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -83,12 +82,11 @@ const TrainerAuthentication = ({ onLogin }) => {
           required
         />
 
-        <button type="submit">
-          {isLogin ? "Login" : "Register"}
-        </button>
+        <button type="submit">{isLogin ? "Login" : "Register"}</button>
       </form>
     </div>
   );
 };
 
 export default TrainerAuthentication;
+
