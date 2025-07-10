@@ -1,4 +1,3 @@
-// TrainerAuthentication.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -8,30 +7,22 @@ const TrainerAuthentication = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const url = isLogin
-        ? "http://localhost/your-folder/trainer_login.php"
-        : "http://localhost/your-folder/trainer_register.php";
+        ? "http://localhost/ITP-1-Repository/server/trainer_login.php"
+        : "http://localhost/ITP-1-Repository/server/trainer_register.php";
 
       const response = await axios.post(url, form);
 
       if (response.data.success) {
         alert(response.data.message);
-
-        if (isLogin) {
-          // Pass user data to parent on successful login
-          onLogin(response.data.user);
-        } else {
-          // Reset form and switch to login mode after successful registration
-          setForm({ name: '', email: '', password: '' });
-          setIsLogin(true);
-        }
+        if (isLogin) onLogin(response.data.trainer);
+        else setIsLogin(true);
       } else {
-        alert(response.data.message || "Action failed.");
+        alert(response.data.message);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
       alert("Something went wrong. Please try again.");
     }
   };
@@ -39,23 +30,12 @@ const TrainerAuthentication = ({ onLogin }) => {
   return (
     <div className="auth-container">
       <div className="auth-tabs">
-        <button
-          onClick={() => setIsLogin(true)}
-          className={isLogin ? 'active' : ''}
-        >
-          Login
-        </button>
-        <button
-          onClick={() => setIsLogin(false)}
-          className={!isLogin ? 'active' : ''}
-        >
-          Register
-        </button>
+        <button onClick={() => setIsLogin(true)} className={isLogin ? 'active' : ''}>Login</button>
+        <button onClick={() => setIsLogin(false)} className={!isLogin ? 'active' : ''}>Register</button>
       </div>
 
       <form onSubmit={handleSubmit}>
         <h2>Trainer {isLogin ? "Login" : "Register"}</h2>
-
         {!isLogin && (
           <input
             type="text"
@@ -65,7 +45,6 @@ const TrainerAuthentication = ({ onLogin }) => {
             required
           />
         )}
-
         <input
           type="email"
           placeholder="Email"
@@ -73,7 +52,6 @@ const TrainerAuthentication = ({ onLogin }) => {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
         />
-
         <input
           type="password"
           placeholder="Password"
@@ -81,7 +59,6 @@ const TrainerAuthentication = ({ onLogin }) => {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           required
         />
-
         <button type="submit">{isLogin ? "Login" : "Register"}</button>
       </form>
     </div>
@@ -89,4 +66,5 @@ const TrainerAuthentication = ({ onLogin }) => {
 };
 
 export default TrainerAuthentication;
+
 
