@@ -7,60 +7,44 @@ const DonorAuthentication = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const endpoint = isLogin
-      ? 'http://localhost/ITP-1-Repository/server/donor_login.php'
-      : 'http://localhost/ITP-1-Repository/server/donor_register.php';
-
     try {
-      const response = await axios.post(endpoint, form);
-      const data = response.data;
-
-      if (data.success) {
-        alert(data.message);
-        if (isLogin && onLogin) {
-          onLogin(data); // Pass data to parent if needed
-        }
-        if (!isLogin) {
-          // Switch to login after successful registration
-          setIsLogin(true);
-          setForm({ name: '', email: '', password: '' });
+      if (isLogin) {
+        const res = await axios.post('http://localhost/ITP-1-Repository/server/donor_login.php', {
+          email: form.email,
+          password: form.password,
+        });
+        if (res.data.success) {
+          onLogin(res.data);
+          alert(res.data.message);
+        } else {
+          alert(res.data.message);
         }
       } else {
-        alert(data.message || 'Something went wrong.');
+        const res = await axios.post('http://localhost/ITP-1-Repository/server/donor_register.php', form);
+        alert(res.data.message);
+        if (res.data.success) {
+          setIsLogin(true);
+        }
       }
     } catch (error) {
       console.error(error);
-      alert('Something went wrong. Please try again.');
+      alert("Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-tabs">
-        <button
-          className={isLogin ? 'active' : ''}
-          onClick={() => setIsLogin(true)}
-        >
-          Login
-        </button>
-        <button
-          className={!isLogin ? 'active' : ''}
-          onClick={() => setIsLogin(false)}
-        >
-          Register
-        </button>
+        <button onClick={() => setIsLogin(true)} className={isLogin ? 'active' : ''}>Login</button>
+        <button onClick={() => setIsLogin(false)} className={!isLogin ? 'active' : ''}>Register</button>
       </div>
-
       <form onSubmit={handleSubmit}>
-        <h2>Donor {isLogin ? 'Login' : 'Register'}</h2>
         {!isLogin && (
           <input
             type="text"
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
           />
         )}
         <input
@@ -68,14 +52,12 @@ const DonorAuthentication = ({ onLogin }) => {
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
         />
         <input
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
         />
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>
