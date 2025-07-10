@@ -1,6 +1,9 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+
+include 'connect.php'; // Ensure path is correct
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -9,19 +12,24 @@ if (!isset($data['name'], $data['email'], $data['password'])) {
     exit;
 }
 
-include 'connect.php';
-
 $name = $data['name'];
 $email = $data['email'];
-$password = $data['password'];
+$password = $data['password']; // or hash it if needed
 
 $sql = "INSERT INTO scholar (name, email, password) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $name, $email, $password);
 
-if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Scholar registered successfully']);
+if ($stmt) {
+    $stmt->bind_param("sss", $name, $email, $password);
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Scholar registered successfully']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $stmt->error]);
+    }
+    $stmt->close();
 } else {
-    echo json_encode(['success' => false, 'message' => 'Registration failed']);
+    echo json_encode(['success' => false, 'message' => 'Statement preparation failed: ' . $conn->error]);
 }
+
+$conn->close();
 ?>
