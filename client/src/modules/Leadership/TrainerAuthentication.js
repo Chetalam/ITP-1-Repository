@@ -15,9 +15,14 @@ const TrainerAuthentication = ({ onLogin }) => {
       const response = await axios.post(url, form);
 
       if (response.data.success) {
-        alert(response.data.message);
-        if (isLogin) onLogin(response.data.trainer);
-        else setIsLogin(true);
+        // Show more data after login
+        if (isLogin) {
+          onLogin({
+            trainerId: response.data.trainerId,
+            name: response.data.name,
+            email: response.data.email
+          });
+        } else setIsLogin(true);
       } else {
         alert(response.data.message);
       }

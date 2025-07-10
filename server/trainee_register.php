@@ -3,33 +3,35 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-include 'connect.php';
+require 'db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['name'], $data['email'], $data['password'])) {
-    echo json_encode(['success' => false, 'message' => 'Missing fields']);
+$name = trim($data['name'] ?? '');
+$email = trim($data['email'] ?? '');
+$password = trim($data['password'] ?? '');
+
+if (empty($name) || empty($email) || empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'All fields are required.']);
     exit;
 }
 
-$name = $data['name'];
-$email = $data['email'];
-$password = $data['password'];
+try {
+    $stmt = $pdo->prepare("SELECT id FROM trainee WHERE email = ?");
+    $stmt->execute([$email]);
 
-$sql = "INSERT INTO trainee_users (name, email, password) VALUES (?, ?, ?)";
-$stmt = $conn->prepare($sql);
-
-if ($stmt) {
-    $stmt->bind_param("sss", $name, $email, $password);
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Trainee registered successfully']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to register: ' . $stmt->error]);
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['success' => false, 'message' => 'Email already registered.']);
+        exit;
     }
-    $stmt->close();
-} else {
-    echo json_encode(['success' => false, 'message' => 'Statement preparation failed: ' . $conn->error]);
-}
 
-$conn->close();
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $pdo->prepare("INSERT INTO trainee (name, email, password) VALUES (?, ?, ?)");
+    $stmt->execute([$name, $email, $hashedPassword]);
+
+    echo json_encode(['success' => true, 'message' => 'Trainee registered successfully.']);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
+}
 ?>

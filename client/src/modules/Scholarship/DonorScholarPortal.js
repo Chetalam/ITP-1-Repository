@@ -25,18 +25,23 @@ const DonorScholarPortal = () => {
     <div className="content">
       {/* Left Section */}
       <div className="left-section">
-        <h1>
-          {activeRole === 'donor' ? 'Donor Portal' : 'Scholar Portal'}
-        </h1>
-        <p>
-          {activeRole === 'donor'
-            ? 'Register or log in to sponsor scholars and see your dashboard.'
-            : 'Register or log in to apply for sponsorships and view your applications.'}
-        </p>
+        {/* Removed Donor/Scholar Portal heading for a cleaner look */}
         <h2>Why Scholarships Matter</h2>
         <p>
-          Sponsorship fosters growth, learning, and empowerment for both donors and scholars.
-          It can change lives by providing access to education and resources.
+          Scholarships empower students to pursue their dreams, overcome financial
+          barriers, and achieve academic excellence.
+          <br />
+          They open doors to new opportunities, foster innovation, and help build a
+          brighter future for individuals and communities.
+          <br />
+          Through support and opportunity, donors help scholars unlock their full
+          potential and contribute to society.
+          <br />
+          Whether you are starting your journey or aiming higher, a scholarship can
+          make a meaningful difference.
+          <br />
+          Scholarships also promote equality, diversity, and the advancement of
+          underrepresented groups in education.
         </p>
         <h2>Real Impact Story</h2>
         <img
@@ -49,6 +54,21 @@ const DonorScholarPortal = () => {
           The programme has emphasised interventions that empower girls through scholarships and support.
           It has accelerated participation of disadvantaged girls in primary and secondary education.
         </p>
+        {donors.length > 0 && (
+          <div className="donors-list">
+            <h2>Our Donors</h2>
+            <ul>
+              {donors.map((donor) => (
+                <li key={donor.id}>{donor.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Right Section */}
+      <div className="right-section">
+        {/* Scholarship Opportunities moved to the right */}
         <div className="opportunities-list">
           <h2>Scholarship Opportunities</h2>
           <ul>
@@ -89,20 +109,6 @@ const DonorScholarPortal = () => {
           </li>
           </ul>
         </div>
-        {donors.length > 0 && (
-          <div className="donors-list">
-            <h2>Our Donors</h2>
-            <ul>
-              {donors.map((donor) => (
-                <li key={donor.id}>{donor.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      {/* Right Section */}
-      <div className="right-section">
         {/* Tabs */}
         <div className="auth-tabs">
           <button
@@ -118,7 +124,6 @@ const DonorScholarPortal = () => {
             Scholar
           </button>
         </div>
-
         {/* Merged Role View */}
         {activeRole === 'scholar' ? (
           scholarData ? (

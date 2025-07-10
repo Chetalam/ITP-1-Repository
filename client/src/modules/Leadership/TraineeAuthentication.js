@@ -15,9 +15,14 @@ const TraineeAuthentication = ({ onLogin }) => {
       const response = await axios.post(url, form);
 
       if (response.data.success) {
-        alert(response.data.message);
-        if (isLogin) onLogin(response.data.trainee);
-        else setIsLogin(true); // switch to login tab
+        // Show more data after login
+        if (isLogin) {
+          onLogin({
+            traineeId: response.data.traineeId,
+            name: response.data.name,
+            email: response.data.email
+          });
+        } else setIsLogin(true); // switch to login tab
       } else {
         alert(response.data.message);
       }

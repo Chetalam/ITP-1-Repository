@@ -51,7 +51,7 @@ const MentorModule = () => {
         {mentors.length > 0 ? (
           <ul>
             {mentors.map((m) => (
-              <li key={m.id}>{m.name} ({m.email})</li>
+              <li key={m.id}>{m.name}</li>
             ))}
           </ul>
         ) : (
@@ -61,6 +61,42 @@ const MentorModule = () => {
 
       {/* Right Section */}
       <div className="right-section">
+        {/* Mentorship Opportunities */}
+        <div className="opportunities-list">
+          <h2>Mentorship Opportunities</h2>
+          <ul>
+            <li>
+              <a href="https://femiscope.org/" target="_blank" rel="noopener noreferrer">
+                Femiscope Initiative (Githurai 44, Nairobi)
+              </a>
+            </li>
+            <li>
+              <a href="https://passiontosharefoundation.org/mentorship-program/" target="_blank" rel="noopener noreferrer">
+                Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)
+              </a>
+            </li>
+            <li>
+              <a href="https://swahiba.org/mentorship-empowerment-program/" target="_blank" rel="noopener noreferrer">
+                Swahiba Networks – Mentorship & Empowerment Program (MEP)
+              </a>
+            </li>
+            <li>
+              <a href="https://hopeforgirls.or.ke/mentorship/" target="_blank" rel="noopener noreferrer">
+                HOPE for Girls @ VISA
+              </a>
+            </li>
+            <li>
+              <a href="https://mentormatchkenya.com/" target="_blank" rel="noopener noreferrer">
+                Mentor Match Kenya
+              </a>
+            </li>
+            <li>
+              <a href="https://www.centerformentorship.co.ke/" target="_blank" rel="noopener noreferrer">
+                Center for Mentorship & Counselling
+              </a>
+            </li>
+          </ul>
+        </div>
         {/* Tabs */}
         <div className="auth-tabs">
           <button
@@ -76,42 +112,6 @@ const MentorModule = () => {
             Mentee
           </button>
         </div>
-
-        {/* Mentorship Opportunities */}
-        <h1>Mentorship Opportunities</h1>
-        <ul className="mentorship-list">
-          <li>
-            <a href="https://femiscope.org/" target="_blank" rel="noopener noreferrer">
-              Femiscope Initiative (Githurai 44, Nairobi)
-            </a>
-          </li>
-          <li>
-            <a href="https://passiontosharefoundation.org/mentorship-program/" target="_blank" rel="noopener noreferrer">
-              Passion to Share Foundation – “Gift Her Hands” (Kibera, Nairobi)
-            </a>
-          </li>
-          <li>
-            <a href="https://swahiba.org/mentorship-empowerment-program/" target="_blank" rel="noopener noreferrer">
-              Swahiba Networks – Mentorship & Empowerment Program (MEP)
-            </a>
-          </li>
-          <li>
-            <a href="https://hopeforgirls.or.ke/mentorship/" target="_blank" rel="noopener noreferrer">
-              HOPE for Girls @ VISA
-            </a>
-          </li>
-          <li>
-            <a href="https://mentormatchkenya.com/" target="_blank" rel="noopener noreferrer">
-              Mentor Match Kenya
-            </a>
-          </li>
-          <li>
-            <a href="https://www.centerformentorship.co.ke/" target="_blank" rel="noopener noreferrer">
-              Center for Mentorship & Counselling
-            </a>
-          </li>
-        </ul>
-
         {/* Authentication / Dashboard */}
         {activeRole === 'mentor' ? (
           mentorData ? (
