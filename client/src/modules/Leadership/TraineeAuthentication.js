@@ -8,44 +8,37 @@ const TraineeAuthentication = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (isLogin) {
-        const res = await axios.post('/api/trainee/login', {
-          email: form.email,
-          password: form.password,
-        });
-        onLogin(res.data); // Pass traineeId and name
+      const url = isLogin
+        ? "http://localhost/ITP-1-Repository/server/trainee_login.php"
+        : "http://localhost/ITP-1-Repository/server/trainee_register.php";
+
+      const response = await axios.post(url, form);
+
+      if (response.data.success) {
+        alert(response.data.message);
+        if (isLogin) onLogin(response.data.trainee);
+        else setIsLogin(true); // switch to login tab
       } else {
-        await axios.post('/api/trainee/register', form);
-        alert('Registered successfully! You can now log in.');
-        setIsLogin(true);
-        setForm({ name: '', email: '', password: '' });
+        alert(response.data.message);
       }
-    } catch (err) {
-      console.error('Authentication error:', err);
-      alert('Something went wrong. Please try again.');
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again.");
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-tabs">
-        <button
-          className={isLogin ? 'active' : ''}
-          onClick={() => setIsLogin(true)}
-        >
-          Login
-        </button>
-        <button
-          className={!isLogin ? 'active' : ''}
-          onClick={() => setIsLogin(false)}
-        >
-          Register
-        </button>
+        <button onClick={() => setIsLogin(true)} className={isLogin ? 'active' : ''}>Login</button>
+        <button onClick={() => setIsLogin(false)} className={!isLogin ? 'active' : ''}>Register</button>
       </div>
+
       <form onSubmit={handleSubmit}>
-        <h2>Trainee {isLogin ? 'Login' : 'Register'}</h2>
+        <h2>Trainee {isLogin ? "Login" : "Register"}</h2>
         {!isLogin && (
           <input
+            type="text"
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -53,8 +46,8 @@ const TraineeAuthentication = ({ onLogin }) => {
           />
         )}
         <input
-          placeholder="Email"
           type="email"
+          placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
@@ -66,7 +59,7 @@ const TraineeAuthentication = ({ onLogin }) => {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           required
         />
-        <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
+        <button type="submit">{isLogin ? "Login" : "Register"}</button>
       </form>
     </div>
   );
