@@ -14,7 +14,7 @@ const DonorModule = () => {
 
   useEffect(() => {
     axios
-      .get('/api/donors')
+      .get('http://localhost/ITP-1-Repository/server/get_donors.php')
       .then((res) => setDonors(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -112,7 +112,7 @@ const DonorModule = () => {
             </a>
           </li>
         </ul>
-          
+        
         {/* Authentication / Dashboard */}
         {activeRole === 'donor' ? (
           donorData ? (

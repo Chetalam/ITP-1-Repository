@@ -24,9 +24,14 @@ const ScholarAuthentication = ({ onLogin }) => {
         alert(data.message);
 
         if (isLogin) {
-          onLogin(data); // Pass logged-in user data up
+          // ✅ Save scholarId to localStorage
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("scholarId", data.scholarId);
+
+          // Call parent callback with user data
+          onLogin(data);
         } else {
-          // Clear form and switch to login
+          // Registration successful: clear form and switch to login
           setForm({ name: '', email: '', password: '' });
           setIsLogin(true);
         }
@@ -94,4 +99,3 @@ const ScholarAuthentication = ({ onLogin }) => {
 };
 
 export default ScholarAuthentication;
-
