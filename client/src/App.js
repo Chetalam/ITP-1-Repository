@@ -6,14 +6,13 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import ProtectedRoute from './components/ProtectedRoute';
 
 import MentorModule from './modules/Mentorship/MentorModule';
-import DonorModule from './modules/Scholarship/DonorModule';
-import TrainerModule from './modules/Leadership/TrainerModule'; // or LeadershipPortal
+import DonorScholarPortal from './modules/Scholarship/DonorScholarPortal'; // ✅ Correct import
+import TrainerModule from './modules/Leadership/TrainerModule';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import RegisterForm from './components/RegisterForm';
 
-// ✅ LogoutButton with className
 function LogoutButton() {
   const navigate = useNavigate();
 
@@ -120,7 +119,7 @@ function App() {
             path="/scholarship"
             element={
               <ProtectedRoute>
-                <DonorModule />
+                <DonorScholarPortal />
               </ProtectedRoute>
             }
           />
@@ -138,4 +137,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

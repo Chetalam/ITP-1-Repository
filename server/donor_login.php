@@ -2,28 +2,36 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
-include 'connect.php';
+
+require 'db.php';
+
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['email'], $data['password'])) {
-    echo json_encode(['success' => false, 'message' => 'Missing fields']);
+$email = trim($data['email'] ?? '');
+$password = trim($data['password'] ?? '');
+
+if (empty($email) || empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'Missing email or password.']);
     exit;
 }
 
-$email = $data['email'];
-$password = $data['password'];
+try {
+    $stmt = $pdo->prepare("SELECT id, name, email, password FROM donor WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM donor WHERE email = ? AND password = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $email, $password);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows > 0) {
-    echo json_encode(['success' => true, 'message' => 'Login successful']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Login failed. Please check your credentials.']);
+    if ($user && password_verify($password, $user['password'])) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Login successful.',
+            'donorId' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email']
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid credentials.']);
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
 }
-$stmt->close();
-$conn->close();
 ?>

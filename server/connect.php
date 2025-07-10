@@ -1,4 +1,5 @@
 <?php
+require 'db.php';
 $host = "localhost";
 $user = "root";
 $pass = ""; // leave blank if no password

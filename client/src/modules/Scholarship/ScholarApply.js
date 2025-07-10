@@ -2,43 +2,43 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const ScholarApply = ({ scholarId }) => {
-  const [scholarshipId, setScholarshipId] = useState('');
+  const [donorId, setDonorId] = useState('');
   const [donors, setDonors] = useState([]);
 
   useEffect(() => {
     // Fetch available donors
-    const fetchDonors = async () => {
-      try {
-        const res = await axios.get('/api/donor');
-        setDonors(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchDonors();
+    axios
+      .get('http://localhost/ITP-1-Repository/server/get_donors.php')
+      .then((res) => setDonors(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
   const handleApply = async () => {
-    if (!scholarshipId) {
-      alert('Please select a donor to apply.');
+    if (!donorId) {
+      alert('Please select a donor.');
       return;
     }
-    await axios.post(`/api/scholar/${scholarId}/apply`, { donorId: scholarshipId });
+
+    await axios.post('http://localhost/ITP-1-Repository/server/apply_to_donor.php', {
+      scholar_id: scholarId,
+      donor_id: donorId,
+    });
+
     alert('Application submitted!');
-    setScholarshipId('');
+    setDonorId('');
   };
 
   return (
     <div>
-      <h3>Assign Yourself to a Donor</h3>
+      <h3>Apply to a Donor</h3>
       <select
-        value={scholarshipId}
-        onChange={(e) => setScholarshipId(e.target.value)}
+        value={donorId}
+        onChange={(e) => setDonorId(e.target.value)}
       >
         <option value="">Select a donor</option>
         {donors.map((d) => (
           <option key={d.id} value={d.id}>
-            {d.name}
+            {d.name} ({d.email})
           </option>
         ))}
       </select>
