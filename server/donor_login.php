@@ -1,15 +1,14 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
-
+include 'connect.php';
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($data['email'], $data['password'])) {
-    echo json_encode(['success' => false, 'message' => 'Missing credentials']);
+    echo json_encode(['success' => false, 'message' => 'Missing fields']);
     exit;
 }
-
-include 'connect.php';
 
 $email = $data['email'];
 $password = $data['password'];
@@ -25,4 +24,6 @@ if ($result->num_rows > 0) {
 } else {
     echo json_encode(['success' => false, 'message' => 'Login failed. Please check your credentials.']);
 }
+$stmt->close();
+$conn->close();
 ?>
