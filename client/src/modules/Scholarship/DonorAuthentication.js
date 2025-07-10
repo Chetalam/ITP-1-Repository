@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const DonorAuthentication = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -7,44 +6,53 @@ const DonorAuthentication = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      if (isLogin) {
-        const res = await axios.post('http://localhost/ITP-1-Repository/server/donor_login.php', {
-          email: form.email,
-          password: form.password,
-        });
-        if (res.data.success) {
-          onLogin(res.data);
-          alert(res.data.message);
-        } else {
-          alert(res.data.message);
+      const url = isLogin
+        ? 'http://localhost/ITP-1-Repository/server/donor_login.php'
+        : 'http://localhost/ITP-1-Repository/server/donor_register.php';
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        alert(result.message);
+        if (isLogin && onLogin) {
+          onLogin(result); // pass result to parent
+        }
+        if (!isLogin) {
+          setIsLogin(true); // switch to login after registration
         }
       } else {
-        const res = await axios.post('http://localhost/ITP-1-Repository/server/donor_register.php', form);
-        alert(res.data.message);
-        if (res.data.success) {
-          setIsLogin(true);
-        }
+        alert(result.message || 'Something went wrong.');
       }
     } catch (error) {
-      console.error(error);
-      alert("Something went wrong. Please try again.");
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-tabs">
-        <button onClick={() => setIsLogin(true)} className={isLogin ? 'active' : ''}>Login</button>
-        <button onClick={() => setIsLogin(false)} className={!isLogin ? 'active' : ''}>Register</button>
+        <button className={isLogin ? 'active' : ''} onClick={() => setIsLogin(true)}>Login</button>
+        <button className={!isLogin ? 'active' : ''} onClick={() => setIsLogin(false)}>Register</button>
       </div>
       <form onSubmit={handleSubmit}>
+        <h2>Donor {isLogin ? 'Login' : 'Register'}</h2>
         {!isLogin && (
           <input
-            type="text"
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
           />
         )}
         <input
@@ -52,12 +60,14 @@ const DonorAuthentication = ({ onLogin }) => {
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
         />
         <input
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
         />
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>
@@ -66,4 +76,5 @@ const DonorAuthentication = ({ onLogin }) => {
 };
 
 export default DonorAuthentication;
+
 
