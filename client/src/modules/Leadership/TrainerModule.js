@@ -55,18 +55,7 @@ const TrainerModule = () => {
         ) : (
           <p>No trainers available at the moment.</p>
         )}
-        {/* Trainee: Apply to Trainer & View Applications */}
-        {activeRole === 'trainee' && traineeData && (
-          <div className="trainee-applications">
-            <h3>Apply to a Trainer</h3>
-            <ApplyToTrainerSection
-              traineeId={traineeData.traineeId}
-              trainers={trainers}
-            />
-            <h3>Trainers You've Applied To</h3>
-            <AppliedTrainersList traineeId={traineeData.traineeId} />
-          </div>
-        )}
+        {/* ...existing code... */}
       </div>
 
       {/* Right Section */}
@@ -119,65 +108,5 @@ const TrainerModule = () => {
   );
 };
 
-function ApplyToTrainerSection({ traineeId, trainers }) {
-  const [selectedTrainer, setSelectedTrainer] = useState('');
-  const [status, setStatus] = useState('');
-
-  const handleApply = () => {
-    if (!selectedTrainer) return;
-    axios
-      .post('http://localhost/ITP-1-Repository/server/apply_to_trainer.php', {
-        trainee_id: traineeId,
-        trainer_id: selectedTrainer,
-      })
-      .then((res) => {
-        setStatus(res.data.success ? 'Application sent!' : res.data.message || 'Error');
-      })
-      .catch(() => setStatus('Error applying.'));
-  };
-
-  return (
-    <div>
-      <select
-        value={selectedTrainer}
-        onChange={(e) => setSelectedTrainer(e.target.value)}
-      >
-        <option value="">Select a trainer</option>
-        {trainers.map((t) => (
-          <option key={t.id} value={t.id}>{t.name}</option>
-        ))}
-      </select>
-      <button onClick={handleApply} disabled={!selectedTrainer}>
-        Apply
-      </button>
-      {status && <div className="status-message">{status}</div>}
-    </div>
-  );
-}
-
-function AppliedTrainersList({ traineeId }) {
-  const [applied, setApplied] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost/ITP-1-Repository/server/get_trainee_applications.php?trainee_id=${traineeId}`)
-      .then((res) => {
-        setApplied(res.data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [traineeId]);
-
-  if (loading) return <div>Loading...</div>;
-  if (!applied.length) return <div>No applications yet.</div>;
-  return (
-    <ul>
-      {applied.map((trainer) => (
-        <li key={trainer.id}>{trainer.name}</li>
-      ))}
-    </ul>
-  );
-}
 
 export default TrainerModule;

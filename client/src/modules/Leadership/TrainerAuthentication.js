@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const TrainerAuthentication = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', description: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +20,8 @@ const TrainerAuthentication = ({ onLogin }) => {
           onLogin({
             trainerId: response.data.trainerId,
             name: response.data.name,
-            email: response.data.email
+            email: response.data.email,
+            description: response.data.description
           });
         } else setIsLogin(true);
       } else {
@@ -42,21 +43,40 @@ const TrainerAuthentication = ({ onLogin }) => {
       <form onSubmit={handleSubmit}>
         <h2>Trainer {isLogin ? "Login" : "Register"}</h2>
         {!isLogin && (
+          <>
+            <input
+              type="text"
+              placeholder="Name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+            <textarea
+              placeholder="Leadership Scope"
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              required
+              rows={3}
+              style={{ marginTop: '8px', width: '100%' }}
+            />
+          </>
+        )}
+        {isLogin && (
           <input
-            type="text"
-            placeholder="Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
           />
         )}
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
         <input
           type="password"
           placeholder="Password"

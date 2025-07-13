@@ -10,9 +10,14 @@ $data = json_decode(file_get_contents("php://input"), true);
 $name = $data['name'] ?? '';
 $email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
+$description = $data['description'] ?? '';
 
 if (empty($name) || empty($email) || empty($password)) {
     echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+    exit;
+}
+if (empty($description)) {
+    echo json_encode(['success' => false, 'message' => 'Leadership scope is required.']);
     exit;
 }
 
@@ -27,8 +32,8 @@ try {
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $pdo->prepare("INSERT INTO trainer (name, email, password) VALUES (?, ?, ?)");
-    $stmt->execute([$name, $email, $hashedPassword]);
+    $stmt = $pdo->prepare("INSERT INTO trainer (name, email, password, description) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$name, $email, $hashedPassword, $description]);
 
     $trainerId = $pdo->lastInsertId();
 
@@ -37,7 +42,8 @@ try {
         'message' => 'Trainer registered successfully.',
         'trainerId' => $trainerId,
         'name' => $name,
-        'email' => $email
+        'email' => $email,
+        'description' => $description
     ]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);

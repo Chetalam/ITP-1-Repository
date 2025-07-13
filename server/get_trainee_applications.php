@@ -13,7 +13,7 @@ $trainee_id = intval($_GET['trainee_id']);
 
 try {
     $stmt = $pdo->prepare("
-        SELECT tr.id, tr.name, tr.email
+        SELECT tr.id, tr.name, tr.email, tr.description
         FROM trainee_trainers tt
         JOIN trainer tr ON tt.trainer_id = tr.id
         WHERE tt.trainee_id = ?

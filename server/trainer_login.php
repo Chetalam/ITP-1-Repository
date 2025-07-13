@@ -16,7 +16,7 @@ if (empty($email) || empty($password)) {
 }
 
 try {
-    $stmt = $pdo->prepare("SELECT id, name, email, password FROM trainer WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT id, name, email, password, description FROM trainer WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -26,7 +26,8 @@ try {
             'message' => 'Login successful.',
             'trainerId' => $user['id'],
             'name' => $user['name'],
-            'email' => $user['email']
+            'email' => $user['email'],
+            'description' => $user['description']
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Invalid credentials.']);
