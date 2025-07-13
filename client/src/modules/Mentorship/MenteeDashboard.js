@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
-const MenteeDashboard = ({ menteeId, refreshKey }) => {
-  const [mentors, setMentors] = useState([]);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!menteeId) return;
-    axios
-      .get("http://localhost/ITP-1-Repository/server/get_mentee_applications.php", { params: { mentee_id: menteeId } })
-      .then((res) => {
-        if (res.data.success) {
-          setMentors(res.data.mentors);
-        } else {
-          setError(res.data.message);
-        }
-      })
-      .catch((err) => {
-        setError("API Error: " + err.message);
-      });
-  }, [menteeId, refreshKey]);
-
+const MenteeDashboard = ({ menteeId }) => {
+  // Only show dashboard if menteeId is present (mentee is logged in)
+  if (!menteeId) {
+    return (
+      <div style={{ padding: '32px', textAlign: 'center', color: '#d9534f' }}>
+        <h2>Please log in to view your dashboard.</h2>
+      </div>
+    );
+  }
   return (
     <div>
-      {/* My Applications block removed as requested. */}
+      {/* Dashboard content goes here. */}
     </div>
   );
 };

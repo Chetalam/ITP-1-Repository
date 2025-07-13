@@ -46,7 +46,6 @@ const MenteeApply = ({ menteeId, onApplied }) => {
           mentors.map((mentor) => (
             <div key={mentor.id} style={{ background: '#fff', border: '1px solid #007bff', borderRadius: '8px', padding: '14px', marginBottom: '14px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
               <strong>Name:</strong> {mentor.name}<br />
-              <strong>Email:</strong> {mentor.email}<br />
               <strong>Mentorship Scope:</strong> {mentor.description || 'No mentorship scope provided.'}
             </div>
           ))
