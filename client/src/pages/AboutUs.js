@@ -7,8 +7,8 @@ function AboutUs() {
   const [partners, setPartners] = useState(0);
 
   useEffect(() => {
-    // Fetch real counts from backend
-    fetch('http://localhost:5000/api/impact-counts')
+    // Fetch real counts from PHP backend
+    fetch('http://localhost/ITP-1-Repository/server/api/impact-counts.php')
       .then(res => res.json())
       .then(data => {
         setMentored(data.mentored || 0);
