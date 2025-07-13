@@ -127,10 +127,7 @@ const DonorScholarPortal = () => {
         {/* Merged Role View */}
         {activeRole === 'scholar' ? (
           scholarData ? (
-            <>
-              <ScholarDashboard scholarId={scholarData.scholarId} />
-              <ScholarApply scholarId={scholarData.scholarId} />
-            </>
+            <ScholarApply scholarId={scholarData.scholarId} />
           ) : (
             <ScholarAuthentication onLogin={setScholarData} />
           )

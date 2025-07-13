@@ -70,19 +70,23 @@ const MenteeApply = ({ menteeId, onApplied }) => {
 
       <button onClick={handleApply} style={{ background: '#007bff', color: '#fff', border: 'none', borderRadius: '6px', padding: '10px 24px', fontSize: '16px', marginBottom: '24px' }}>Apply</button>
 
-      <h4 style={{ color: '#007bff' }}>My Applications</h4>
-      {appliedMentors.length > 0 ? (
-        <ul>
-          {appliedMentors.map((mentor) => (
-            <li key={mentor.id} style={{ marginBottom: '12px', padding: '8px', border: '1px solid #ccc', borderRadius: '6px', background: '#f5f5f5' }}>
-              <strong>{mentor.name}</strong> <span style={{ color: '#555' }}>({mentor.email})</span><br />
-              <strong>Mentorship Scope:</strong> {mentor.description || 'No mentorship scope provided.'}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>You have not applied to any mentors yet.</p>
-      )}
+      <div style={{ marginTop: '8px', padding: '16px', background: '#f5f5f5', borderRadius: '8px', border: '1px solid #eee' }}>
+        <h2 style={{ marginTop: 0 }}>My Applications</h2>
+        {appliedMentors.length > 0 ? (
+          <ul>
+            {appliedMentors.map((mentor) => (
+              <li key={mentor.id} style={{ marginBottom: '18px', padding: '12px', border: '1px solid #ccc', borderRadius: '8px', background: '#f9f9f9' }}>
+                <strong>{mentor.name}</strong> <span style={{ color: '#555' }}>({mentor.email})</span>
+                <div style={{ marginTop: '8px' }}>
+                  <strong>Mentorship Scope:</strong> <span>{mentor.description || 'No mentorship scope provided.'}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>You have not applied to any mentors yet.</p>
+        )}
+      </div>
     </div>
   );
 };
