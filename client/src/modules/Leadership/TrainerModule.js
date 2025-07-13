@@ -16,8 +16,18 @@ const TrainerModule = () => {
   useEffect(() => {
     axios
       .get('http://localhost/ITP-1-Repository/server/get_trainers.php')
-      .then((res) => setTrainers(res.data))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        // Ensure trainers is always an array
+        if (Array.isArray(res.data)) {
+          setTrainers(res.data);
+        } else {
+          setTrainers([]);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setTrainers([]); // fallback to empty array on error
+      });
   }, [refreshKey]);
 
   // After successful registration, refresh the trainers list
