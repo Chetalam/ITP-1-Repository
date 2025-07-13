@@ -8,8 +8,8 @@ try {
     $stmt1 = $pdo->query("SELECT COUNT(*) FROM mentee_mentors");
     $mentored = $stmt1->fetchColumn();
 
-    // Scholarships Awarded: scholar_donors table
-    $stmt2 = $pdo->query("SELECT COUNT(*) FROM scholar_donors");
+    // Scholarships Awarded: scholar_applications table
+    $stmt2 = $pdo->query("SELECT COUNT(*) FROM scholar_applications");
     $scholarships = $stmt2->fetchColumn();
 
     // Leaders Engaged: trainee_trainers table

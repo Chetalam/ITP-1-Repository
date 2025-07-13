@@ -69,11 +69,11 @@ function AboutUs() {
       <div style={countersContainer}>
         <div style={counterBox}>
           <h3>{mentored.toLocaleString()}</h3>
-          <p>Girls Mentored</p>
+          <p>Mentors Engaged</p>
         </div>
         <div style={counterBox}>
           <h3>{scholarships.toLocaleString()}</h3>
-          <p>Scholarships Awarded</p>
+          <p>Scholarships Engaged</p>
         </div>
         <div style={counterBox}>
           <h3>{partners}</h3>
