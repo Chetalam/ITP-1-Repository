@@ -14,7 +14,7 @@ $mentee_id = intval($_GET['mentee_id']);
 try {
     // Adapted for mentee_mentors table (assuming mentee_id, mentor_id columns)
     $stmt = $pdo->prepare("
-        SELECT m.id, m.name, m.email
+        SELECT m.id, m.name, m.email, m.description
         FROM mentee_mentors mm
         JOIN mentor m ON mm.mentor_id = m.id
         WHERE mm.mentee_id = ?

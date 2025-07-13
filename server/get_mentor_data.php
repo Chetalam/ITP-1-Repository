@@ -11,8 +11,8 @@ if (!$id) {
 }
 
 try {
-    // Get mentor info
-    $stmt = $pdo->prepare("SELECT id, name, email FROM mentor WHERE id = ?");
+    // Get mentor info including mentorship scope
+    $stmt = $pdo->prepare("SELECT id, name, email, description FROM mentor WHERE id = ?");
     $stmt->execute([$id]);
     $mentor = $stmt->fetch(PDO::FETCH_ASSOC);
 

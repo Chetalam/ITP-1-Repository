@@ -42,10 +42,13 @@ const MentorDashboard = ({ mentorId }) => {
 
   return (
     <div className="dashboard">
-      <h2>Welcome, {mentorInfo.name}</h2>
-      <p>Email: {mentorInfo.email}</p>
-      <p>You have {mentorInfo.mentee_count || 0} mentees.</p>
-      <h3>Your Mentees</h3>
+      <h2>Mentor Dashboard</h2>
+      <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '20px' }}>
+        <h3>{mentorInfo.name}</h3>
+        <p><strong>Email:</strong> {mentorInfo.email}</p>
+        <p><strong>Mentorship Scope:</strong> {mentorInfo.description || 'No mentorship scope provided yet.'}</p>
+      </div>
+      <h4>Mentees ({mentorInfo.mentee_count || 0})</h4>
       {mentees.length > 0 ? (
         <ul>
           {mentees.map((mentee) => (

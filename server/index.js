@@ -57,6 +57,10 @@ const User = sequelize.define('User', {
   phone: {
     type: DataTypes.STRING,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   timestamps: false,
 });
@@ -110,14 +114,13 @@ app.post('/api/register-test', (req, res) => {
 
 // ======= User Register Route =======
 app.post('/api/register', async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, password } = req.body;
 
   try {
     const existingUser = await User.findOne({ where: { email } });
-
     if (existingUser) {
       return res.status(200).json({
-        message: 'User already registered. Logging you in.',
+        message: 'User already registered.',
         alreadyRegistered: true,
         userId: existingUser.id,
         name: existingUser.name,
@@ -125,11 +128,10 @@ app.post('/api/register', async (req, res) => {
         phone: existingUser.phone,
       });
     }
-
-    const newUser = await User.create({ name, email, phone });
-
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ name, email, phone, password: hashedPassword });
     res.status(201).json({
-      message: 'User registered successfully.',
+      message: 'User registration successful',
       userId: newUser.id,
       name: newUser.name,
       email: newUser.email,
@@ -161,10 +163,32 @@ app.post('/api/auth/login', async (req, res) => {
   res.json({ message: 'Login successful', userId: user.id });
 });
 
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ where: { email } });
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(401).json({ error: 'Invalid password' });
+  res.json({ success: true, message: 'Login successful', userId: user.id });
+});
+
 // ======= Opportunities =======
 app.get('/api/opportunities', async (req, res) => {
   const opportunities = await Opportunity.findAll();
   res.json(opportunities);
+});
+// ======= Impact Counts API =======
+app.get('/api/impact-counts', async (req, res) => {
+  try {
+    // Example: count users by role (assuming role column exists)
+    // If you have separate tables for mentors, scholars, leaders, adjust accordingly
+    const mentored = await User.count({ where: { role: 'mentee' } });
+    const scholarships = await User.count({ where: { role: 'scholar' } });
+    const leaders = await User.count({ where: { role: 'leader' } });
+    res.json({ mentored, scholarships, leaders });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch impact counts' });
+  }
 });
 
 app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req, res) => {
@@ -176,11 +200,13 @@ app.post('/api/opportunities', authMiddleware, upload.single('file'), async (req
 
 // ======= Mentor Routes =======
 app.post('/api/mentor/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, description } = req.body;
   const hashed = await bcrypt.hash(password, 10);
+  // Ensure description is a trimmed string
+  const desc = (description && typeof description === 'string') ? description.trim() : '';
   await mysqlDb.query(
-    'INSERT INTO mentor_signing (name, email, password) VALUES (?, ?, ?)',
-    [name, email, hashed]
+    'INSERT INTO mentor_signing (name, email, password, description) VALUES (?, ?, ?, ?)',
+    [name, email, hashed, desc]
   );
   res.json({ message: 'Mentor registered successfully' });
 });
@@ -194,18 +220,40 @@ app.post('/api/mentor/login', async (req, res) => {
   const isMatch = await bcrypt.compare(password, mentor.password);
   if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
-  res.json({ mentorId: mentor.id, name: mentor.name });
+  // If description is empty, prompt for mentorship scope
+  const needsDescription = !mentor.description || mentor.description.trim() === '';
+  res.json({ mentorId: mentor.id, name: mentor.name, needsDescription, description: mentor.description });
 });
 
 app.get('/api/mentors', async (req, res) => {
-  const [mentors] = await mysqlDb.query('SELECT id, name, email FROM mentor_signing');
+  // Return only name and mentorship scope (description), not email
+  const [mentors] = await mysqlDb.query('SELECT id, name, description FROM mentor_signing');
   res.json(mentors);
+});
+
+// ======= Mentor Description Update =======
+app.post('/api/mentor/:id/description', async (req, res) => {
+  const mentorId = req.params.id;
+  const { description } = req.body;
+  await mysqlDb.query('UPDATE mentor_signing SET description = ? WHERE id = ?', [description, mentorId]);
+  res.json({ message: 'Mentorship scope updated successfully' });
 });
 
 app.get('/api/mentor/:id/dashboard', async (req, res) => {
   const mentorId = req.params.id;
+  // Get mentor info including email
+  const [mentorRows] = await mysqlDb.query('SELECT name, email, description FROM mentor_signing WHERE id = ?', [mentorId]);
+  const mentor = mentorRows[0] || {};
   const [mentees] = await mysqlDb.query('SELECT * FROM user_mentee WHERE mentor_id = ?', [mentorId]);
-  res.json({ menteeCount: mentees.length, mentees });
+  res.json({
+    mentor: {
+      name: mentor.name,
+      email: mentor.email,
+      description: mentor.description
+    },
+    menteeCount: mentees.length,
+    mentees
+  });
 });
 
 // ======= Mentee Routes =======

@@ -111,6 +111,25 @@ body {
   color: #333;
 }
 
+/* New Flexbox Styles for Sign In Blocks */
+.floating-signin-blocks {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.signin-block {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 2rem 1.5rem;
+  min-width: 300px;
+  max-width: 350px;
+  flex: 1;
+}
+
 /* Auth Panel */
 .auth-panel {
   background: #f9f9ff;

@@ -26,6 +26,7 @@ const MentorAuthentication = ({ onLogin }) => {
           name: form.name,
           email: form.email,
           password: form.password,
+          description: form.description ? form.description.trim() : '',
         });
         
         if (res.data.success) {
@@ -60,28 +61,53 @@ const MentorAuthentication = ({ onLogin }) => {
       </div>
       <form onSubmit={handleSubmit}>
         <h2>Mentor {isLogin ? 'Login' : 'Register'}</h2>
-        {!isLogin && (
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
-          />
+        {isLogin ? (
+          <>
+            <input
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
+          </>
+        ) : (
+          <>
+            <input
+              placeholder="Name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+            <textarea
+              placeholder="Mentorship Scope"
+              value={form.description || ''}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
+          </>
         )}
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>
     </div>

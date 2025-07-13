@@ -7,12 +7,23 @@ function AboutUs() {
   const [partners, setPartners] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setMentored((prev) => (prev < 5000 ? prev + 50 : 5000));
-      setScholarships((prev) => (prev < 1200 ? prev + 10 : 1200));
-      setPartners((prev) => (prev < 50 ? prev + 1 : 50));
-    }, 30);
-    return () => clearInterval(interval);
+    // Fetch real counts from backend
+    fetch('http://localhost:5000/api/impact-counts')
+      .then(res => res.json())
+      .then(data => {
+        setMentored(data.mentored || 0);
+        setScholarships(data.scholarships || 0);
+        setPartners(data.leaders || 0);
+      })
+      .catch(() => {
+        // fallback to animation if backend fails
+        const interval = setInterval(() => {
+          setMentored((prev) => (prev < 5000 ? prev + 50 : 5000));
+          setScholarships((prev) => (prev < 1200 ? prev + 10 : 1200));
+          setPartners((prev) => (prev < 50 ? prev + 1 : 50));
+        }, 30);
+        return () => clearInterval(interval);
+      });
   }, []);
 
   // FAQ accordion state

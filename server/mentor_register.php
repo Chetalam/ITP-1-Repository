@@ -25,10 +25,11 @@ try {
         exit;
     }
 
+    $description = $data['description'] ?? '';
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $pdo->prepare("INSERT INTO mentor (name, email, password) VALUES (?, ?, ?)");
-    $stmt->execute([$name, $email, $hashedPassword]);
+    $stmt = $pdo->prepare("INSERT INTO mentor (name, email, password, description) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$name, $email, $hashedPassword, $description]);
 
     $mentorId = $pdo->lastInsertId();
 

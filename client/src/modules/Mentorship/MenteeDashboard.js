@@ -23,19 +23,7 @@ const MenteeDashboard = ({ menteeId, refreshKey }) => {
 
   return (
     <div>
-      <h2>My Applications</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {mentors.length > 0 ? (
-        <ul>
-          {mentors.map((mentor) => (
-            <li key={mentor.id}>
-              <strong>{mentor.name}</strong> ({mentor.email})
-            </li>
-          ))}
-        </ul>
-      ) : (
-        !error && <p>You have not applied to any mentors yet.</p>
-      )}
+      {/* My Applications block removed as requested. */}
     </div>
   );
 };
