@@ -16,7 +16,7 @@ if (!$scholar_id || !$donor_id) {
 }
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO scholar_applications (scholar_id, donor_id) VALUES (?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO scholar_donors (scholar_id, donor_id) VALUES (?, ?)");
     $stmt->execute([$scholar_id, $donor_id]);
 
     echo json_encode(["success" => true, "message" => "Application submitted successfully."]);
