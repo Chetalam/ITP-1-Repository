@@ -11,8 +11,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 $name = $data['name'] ?? '';
 $email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
+$description = $data['description'] ?? '';
 
-if (empty($name) || empty($email) || empty($password)) {
+if (empty($name) || empty($email) || empty($password) || empty($description)) {
     echo json_encode(['success' => false, 'message' => 'All fields are required.']);
     exit;
 }
@@ -30,9 +31,9 @@ try {
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert donor
-    $stmt = $pdo->prepare("INSERT INTO donor (name, email, password) VALUES (?, ?, ?)");
-    $stmt->execute([$name, $email, $hashedPassword]);
+    // Insert donor with scholarship scope
+    $stmt = $pdo->prepare("INSERT INTO donor (name, email, password, description) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$name, $email, $hashedPassword, $description]);
 
     // Get last inserted ID
     $donorId = $pdo->lastInsertId();

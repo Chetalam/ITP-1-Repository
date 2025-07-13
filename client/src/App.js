@@ -50,6 +50,40 @@ function App() {
       .catch(err => {
         console.error('❌ Backend not responding:', err);
       });
+
+    // Inactivity logout timer with warning
+    let logoutTimer;
+    let warningTimer;
+    let warningShown = false;
+    const logout = () => {
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = '/';
+    };
+    const showWarning = () => {
+      if (!warningShown) {
+        alert('You will be logged out in 5 minutes due to inactivity.');
+        warningShown = true;
+      }
+    };
+    const resetTimer = () => {
+      clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
+      warningShown = false;
+      // Show warning at 10 minutes, logout at 15 minutes
+      warningTimer = setTimeout(showWarning, 10 * 60 * 1000); // 10 minutes
+      logoutTimer = setTimeout(logout, 15 * 60 * 1000); // 15 minutes
+    };
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('keydown', resetTimer);
+    window.addEventListener('click', resetTimer);
+    resetTimer();
+    return () => {
+      clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      window.removeEventListener('click', resetTimer);
+    };
   }, []);
 
   const isLoggedIn = localStorage.getItem('isLoggedIn');

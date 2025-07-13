@@ -34,8 +34,11 @@ const ScholarDashboard = ({ scholarId }) => {
       {donors.length > 0 ? (
         <ul>
           {donors.map((donor) => (
-            <li key={donor.id}>
-              <strong>{donor.name}</strong> ({donor.email})
+            <li key={donor.id} style={{ marginBottom: '18px', padding: '12px', border: '1px solid #ccc', borderRadius: '8px', background: '#f9f9f9' }}>
+              <strong>{donor.name}</strong> <span style={{ color: '#555' }}>({donor.email})</span>
+              <div style={{ marginTop: '8px' }}>
+                <strong>Scholarship Scope:</strong> <span>{donor.description || 'No scholarship scope provided.'}</span>
+              </div>
             </li>
           ))}
         </ul>

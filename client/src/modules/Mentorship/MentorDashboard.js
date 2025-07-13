@@ -41,24 +41,28 @@ const MentorDashboard = ({ mentorId }) => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div className="dashboard">
-      <h2>Mentor Dashboard</h2>
-      <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '20px' }}>
-        <h3>{mentorInfo.name}</h3>
-        <p><strong>Email:</strong> {mentorInfo.email}</p>
-        <p><strong>Mentorship Scope:</strong> {mentorInfo.description || 'No mentorship scope provided yet.'}</p>
-      </div>
-      <h4>Mentees ({mentorInfo.mentee_count || 0})</h4>
-      {mentees.length > 0 ? (
+    <div>
+      <h2>Your Mentor Dashboard</h2>
+      {mentorInfo && (
+        <div style={{ background: '#f9f9f9', border: '1px solid #007bff', borderRadius: '8px', padding: '16px', marginBottom: '18px' }}>
+          <strong>Name:</strong> {mentorInfo.name}<br />
+          <strong>Email:</strong> {mentorInfo.email}<br />
+          <strong>Mentorship Scope:</strong> {mentorInfo.description || 'No mentorship scope provided yet.'}
+        </div>
+      )}
+      <h3>Mentees Who Have Applied To You</h3>
+      {loading ? (
+        <p>Loading mentees...</p>
+      ) : mentees.length === 0 ? (
+        <p>No mentees have applied yet.</p>
+      ) : (
         <ul>
           {mentees.map((mentee) => (
             <li key={mentee.id}>
-              <strong>{mentee.name}</strong> ({mentee.email})
+              {mentee.name} ({mentee.email})
             </li>
           ))}
         </ul>
-      ) : (
-        <p>No mentees have applied yet.</p>
       )}
     </div>
   );

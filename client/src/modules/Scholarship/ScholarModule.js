@@ -98,10 +98,7 @@ export default function ScholarDonorModule() {
             <DonorAuthentication onLogin={setDonorData} />
           )
         ) : scholarData ? (
-          <>
-            <ScholarDashboard scholarId={scholarData.scholarId} />
-            <ScholarApply scholarId={scholarData.scholarId} />
-          </>
+          <ScholarApply scholarId={scholarData.scholarId} />
         ) : (
           <ScholarAuthentication onLogin={setScholarData} />
         )}

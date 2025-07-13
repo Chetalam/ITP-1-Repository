@@ -14,7 +14,7 @@ $scholar_id = intval($_GET['scholar_id']);
 try {
     // Assuming your table is scholar_applications(scholar_id, donor_id)
     $stmt = $pdo->prepare("
-        SELECT d.id, d.name, d.email
+        SELECT d.id, d.name, d.email, d.description
         FROM scholar_applications sa
         JOIN donor d ON sa.donor_id = d.id
         WHERE sa.scholar_id = ?
